@@ -8,28 +8,21 @@ public class ActionCard extends Card{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	enum Action{
-		DrawTwo, Skip, Reverse 
+	
+	
+	public ActionCard(Color cardColor, String cardValue,int score){
+		super(cardColor,ACTION, cardValue,score);		
 	}
 	
-	private Action action;
-	
 
-	public ActionCard(Color color, Action action) {
-		super(color);
-		this.action = action;
-	}
-
-	
-	
 	@Override
     public boolean match(Card card) {
         if (card instanceof ActionCard) {
             ActionCard otherActionCard= (ActionCard) card;
-            return (this.action == otherActionCard.action || this.color.equals(otherActionCard.color));
+            return (this.value.equals(otherActionCard.getCardValue()) || this.cardColor.equals(otherActionCard.getColor()));
         }
         
-        return this.color.equals(card.color);
+        return this.cardColor.equals(card.cardColor);
     }
 
 
@@ -41,12 +34,12 @@ public class ActionCard extends Card{
 	
 	@Override
 	public String getCardValue() {
-		return action.toString();
+		return value;
 	}
 	
 	@Override
 	public String toString() {
-        return color + " " + action;
+        return cardColor + " " + value;
     }
 	
 

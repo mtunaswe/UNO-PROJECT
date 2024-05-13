@@ -8,17 +8,12 @@ public class WildCard extends Card{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	enum Type{
-		NormalWild, DrawFour;
-	}
-
-	private Type type;
 	private Color colorSelected;
 	
-	public WildCard(Type type) {
-		super(null);
-		this.type = type;
+	public WildCard(String cardValue, int score){
+		super(Color.BLACK, WILD, cardValue, score);		
 	}
+	
 	
 	public void useWildColor(Color wildColor){
 		colorSelected = wildColor;
@@ -36,17 +31,17 @@ public class WildCard extends Card{
 	
 	@Override
     public int getScore() {
-        return type == Type.DrawFour ? 50 : 40; // Wild Draw Four is 50, Normal Wild is 40
+        return this.getCardValue().equals("+4") ? 50 : 40; 		// Wild Draw Four is 50, Normal Wild is 40
     }
 	
 	@Override
 	public String getCardValue() {
-		return type.toString();
+		return value;
 	}
 
     @Override
     public String toString() {
-        return "Wild " + type;
+        return "Wild " + value;
     }
 
 	

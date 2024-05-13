@@ -5,7 +5,6 @@ import java.awt.event.MouseEvent;
 import java.util.Random;
 
 import card_model.WildCard;
-import game_model.Player;
 import gui.ViewCard;
 
 public class CPUPlayer extends Player {

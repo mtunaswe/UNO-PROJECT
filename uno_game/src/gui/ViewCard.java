@@ -22,9 +22,10 @@ public class ViewCard extends JPanel{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private Color cardColor = null;
-	private String value = null;
+	public Color cardColor = null;
+	protected String value = null;
 	private int type = 0;
+	private boolean showFront = true;
 	
 	private Border defaultBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.white, Color.gray);
 	private Border focusedBorder = BorderFactory.createEtchedBorder(WHEN_FOCUSED, Color.black, Color.gray);
@@ -37,9 +38,22 @@ public class ViewCard extends JPanel{
 	
 	Dimension CARDSIZE = MEDIUM;
 	
+	int cardWidth = CARDSIZE.width;
+	int cardHeight = CARDSIZE.height;
+	
+	public static int NUMBERS = 1;
+	public static int ACTION = 2;
+	public static int WILD = 3;
+	
+	
+	//constructor for CPUPanel
 	public ViewCard(){
+		this.setPreferredSize(CARDSIZE);
+        this.setBorder(defaultBorder);
+        this.addMouseListener(new MouseHandler());
 	}
 	
+	//constructor for PlayerPanel
 	public ViewCard(Color cardColor, int cardType, String cardValue){
 		this.cardColor = cardColor;
 		this.type = cardType;
@@ -51,12 +65,17 @@ public class ViewCard extends JPanel{
 		this.addMouseListener(new MouseHandler());
 	}
 	
-	protected void paintComponent(Graphics g){
-		super.paintComponent(g);
+	protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        if (showFront) {
+            displayFront(g);
+        } else {
+            displayBack(g);
+        }
+    }
+	
+	private void displayFront(Graphics g) {
 		Graphics2D g2 = (Graphics2D) g;
-		
-		int cardWidth = CARDSIZE.width;
-		int cardHeight = CARDSIZE.height;
 		
 		g2.setColor(Color.WHITE);
 		g2.fillRect(0, 0, cardWidth, cardHeight);
@@ -92,8 +111,33 @@ public class ViewCard extends JPanel{
 		g2.setColor(Color.white);
 		g2.setFont(defaultFont);
 		g2.drawString(value, 2*margin,5*margin);		
+		}
+		
 	}
-	}
+	
+	 private void displayBack(Graphics g) {
+			Graphics2D g2 = (Graphics2D) g;
+	
+	        g2.setColor(Color.GRAY);
+	        g2.fillRect(0, 0, cardWidth, cardHeight);
+	        g2.setColor(Color.BLACK);
+	        g2.setFont(new Font("Cabin", Font.BOLD, 18));
+	        
+	        String unoText = "UNO";
+	        FontMetrics fm = g2.getFontMetrics();
+	        int textWidth = fm.stringWidth(unoText);
+	        int textHeight = fm.getAscent();
+	        g2.drawString("UNO", getWidth() / 2 - 20, getHeight() / 2);
+	        g2.drawString(unoText, (cardWidth - textWidth) / 2, (cardHeight + textHeight) / 2);  // Center the UNO text
+			
+	        
+	    }
+	 
+	 public void toggleCardFace() {
+	        showFront = !showFront;
+	        repaint();
+	    }
+
 	
 	/**
 	 *  Mouse Listener 

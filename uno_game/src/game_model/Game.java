@@ -39,7 +39,7 @@ public class Game {
 	        //Create players
 	        
 	        // First player is a human player
-	        String humanPlayerName = JOptionPane.showInputDialog("Enter your name:");
+	        String humanPlayerName = JOptionPane.showInputDialog("Enter your name for display in game:");
 	        players[0] = new Player(humanPlayerName);
 
 	        // The rest are CPU players

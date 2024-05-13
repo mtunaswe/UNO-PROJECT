@@ -9,26 +9,23 @@ public abstract class Card extends ViewCard{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	protected Color color;
+	protected int score;
 
-	public Card(Color color) {
-		this.color = color;
-		
-	 }
+	public Card(Color cardColor, int cardType, String cardValue, int score) {
+        super(cardColor, cardType, cardValue);  		// Pass parameters to ViewCard's constructor
+        this.score = score;
+    }
 
-	public Color getColor() {
-		return color;
-	 }
-	 
+	public int getScore() {
+		return score;
+	}
 
-	public void setColor(Color color) {
-		this.color = color;
+	public void setScore(int score) {
+		this.score = score;
 	}
 
 	public abstract boolean match(Card card);
 	 
-	public abstract int getScore();
-	
 	public abstract String getCardValue();
 	
 	/*public int compareTo(Card other) {

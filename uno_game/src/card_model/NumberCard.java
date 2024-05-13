@@ -7,38 +7,35 @@ public class NumberCard extends Card{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int number;
 
-	public NumberCard(Color color, int number) {
-		super(color);
-		this.number = number;
+	public NumberCard(Color cardColor, String cardValue, int score){
+		super(cardColor, NUMBERS, cardValue, score);		
 	}
-	 
 	
 	@Override
 	public boolean match(Card card) {
 		if(card instanceof NumberCard) {
 			NumberCard otherNumberCard = (NumberCard) card;
-			return this.color.equals(card.color) || this.number == otherNumberCard.number;
+			return this.cardColor.equals(card.cardColor) || this.score == otherNumberCard.getScore();
 		}
 		
-		return this.color == card.color;
+		return this.cardColor == card.cardColor;
 		
 	}
 	
 	@Override
 	public int getScore() {
-		return number;
+		return score;
 	}
 	
 	@Override
     public String toString() {
-        return color + " " + number;
+        return cardColor + " " + score;
     }
 	
 	@Override
 	public String getCardValue() {
-		return null;
+		return Integer.toString(score);
 		
 	}
 

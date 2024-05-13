@@ -42,7 +42,7 @@ public class InfoPanel extends JPanel {
 
 	private void printError(Graphics g) {
 		if(!error.isEmpty()){
-			Font adjustedFont = new Font("Calibri", Font.PLAIN,	25);
+			Font adjustedFont = new Font("Cabin", Font.PLAIN,	25);
 			
 			//Determine the width of the word to position
 			FontMetrics fm = this.getFontMetrics(adjustedFont);
@@ -57,7 +57,7 @@ public class InfoPanel extends JPanel {
 	}
 
 	private void printMessage(Graphics g) {
-		Font adjustedFont = new Font("Calibri", Font.BOLD,	25);	
+		Font adjustedFont = new Font("Cabin", Font.BOLD,	25);	
 		
 		//Determine the width of the word to position
 		FontMetrics fm = this.getFontMetrics(adjustedFont);
@@ -69,7 +69,7 @@ public class InfoPanel extends JPanel {
 	}
 	
 	private void printDetail(Graphics g){
-		Font adjustedFont = new Font("Calibri", Font.BOLD,	25);	
+		Font adjustedFont = new Font("Cabin", Font.BOLD,	25);	
 		FontMetrics fm = this.getFontMetrics(adjustedFont);
 		g.setColor(new Color(127,127,127));
 		
@@ -85,7 +85,7 @@ public class InfoPanel extends JPanel {
 		g.drawString(text, xPos, 180);
 		
 		//Details
-		adjustedFont = new Font("Calibri", Font.PLAIN,	20);
+		adjustedFont = new Font("Cabin", Font.PLAIN,	20);
 		g.setFont(adjustedFont);
 		fm = this.getFontMetrics(adjustedFont);
 		
