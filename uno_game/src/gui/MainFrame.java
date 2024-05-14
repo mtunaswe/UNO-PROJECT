@@ -23,3 +23,6 @@ public class MainFrame extends JFrame{
 		add(mainPanel);
 	}
 }
+
+
+

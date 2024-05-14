@@ -8,26 +8,24 @@ import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
-
 import game_model.Player;
 
 public class CPUPanel extends JPanel {
-    /**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	private Player player;
+    private static final long serialVersionUID = 1L;
+    private Player player;
     private Box layout;
     private JLayeredPane cardHolder;
-    private JLabel nameLabel;			  //label to display name of CPUs.
-    private JLabel cardCountLabel;        //label to display remaining cards of CPUs.
+    private JLabel nameLabel;              //label to display name of CPUs.
+    private JLabel cardCountLabel;         //label to display remaining cards of CPUs.
     private Box controlPanel;
 
     public CPUPanel(Player newPlayer) {
         this.player = newPlayer;
+        setBackground(new Color(216, 191, 168)); // Set background color to match the table
         layout = Box.createHorizontalBox();
         cardHolder = new JLayeredPane();
         cardHolder.setPreferredSize(new Dimension(200, 175));
+        cardHolder.setBackground(new Color(216, 191, 168)); // Set background color
 
         setupCards();
         setupControlPanel();
@@ -36,23 +34,21 @@ public class CPUPanel extends JPanel {
         layout.add(Box.createHorizontalStrut(5));
         layout.add(controlPanel);
         add(layout);
-        
-
     }
 
     private void setupCards() {
         cardHolder.removeAll();
 
-        Point origin = new Point(10, 20); 		
+        Point origin = new Point(10, 20);         
         int offset = 10; 
         int cardCount = player.getTotalCards();
         
         for (int i = 0; i < player.getTotalCards(); i++) {
                 ViewCard card = new ViewCard();
-                card.toggleCardFace(); 			// Set to show the back of the card
+                card.toggleCardFace();             // Set to show the back of the card
                 card.setBounds(origin.x, origin.y, card.getPreferredSize().width, card.getPreferredSize().height);
                 cardHolder.add(card, i);
-                origin.x += offset; 			// Offset for overlapping cards
+                origin.x += offset;             // Offset for overlapping cards
        }
         
         updateCardCountLabel(cardCount);
@@ -69,26 +65,23 @@ public class CPUPanel extends JPanel {
         updateCardCountLabel(player.getTotalCards());
         
         controlPanel = Box.createVerticalBox();
+        controlPanel.setBackground(new Color(205, 133, 63)); // Set background color
         controlPanel.add(nameLabel);
         controlPanel.add(Box.createVerticalStrut(10)); // Adds vertical space between name label and card count label
         controlPanel.add(cardCountLabel);
-        
-        
     }
 
     public void updateCardCountLabel(int count) {
-    	 if (cardCountLabel != null) { // Null check to prevent NPE
+         if (cardCountLabel != null) { // Null check to prevent NPE
              cardCountLabel.setText("Cards: " + count);
          }
     }
     
     public void refreshPanel() {
-        setupCards(); 			// Re-setup cards which also updates card count
+        setupCards();             // Re-setup cards which also updates card count
         revalidate();
         repaint();
     }
-
-      
 
     public Player getPlayer() {
         return player;
@@ -97,5 +90,4 @@ public class CPUPanel extends JPanel {
     public void setPlayer(Player player) {
         this.player = player;
     }
-
 }

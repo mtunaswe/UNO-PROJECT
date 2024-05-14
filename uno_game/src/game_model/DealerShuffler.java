@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Stack;
 
-import card_model.Card;
 import card_model.Deck;
 import gui.ViewCard;
 

@@ -16,7 +16,7 @@ public class NumberCard extends Card{
 	public boolean match(Card card) {
 		if(card instanceof NumberCard) {
 			NumberCard otherNumberCard = (NumberCard) card;
-			return this.cardColor.equals(card.cardColor) || this.score == otherNumberCard.getScore();
+			return this.getColor().equals(card.getColor()) || this.score == otherNumberCard.getScore();
 		}
 		
 		return this.cardColor == card.cardColor;

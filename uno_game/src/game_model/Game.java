@@ -55,11 +55,37 @@ public class Game {
 	        players[0].toggleTurn(); 			// Start game with the human player
 	    }
 	
-	private int getPlayerCount() {
-        String input = JOptionPane.showInputDialog("How many players? (2-10)");
-        int count = Integer.parseInt(input);
-        return Math.min(Math.max(count, 2), 10); // Ensure player count is within bounds
-    }
+	 private int getPlayerCount() {
+		    int count = 2; // Initialize count
+
+		    while (true) {
+		        try {
+		            String input = JOptionPane.showInputDialog("How many players? (2-10)");
+
+		            // Check if the input is null (user pressed cancel)
+		            if (input == null) {
+		                JOptionPane.showMessageDialog(null, "Please enter a number between 2 and 10.");
+		                continue;
+		            }
+
+		            count = Integer.parseInt(input);
+
+		            // Check if the count is within the valid range
+		            if (count >= 2 && count <= 10) {
+		                break;
+		            } else {
+		                JOptionPane.showMessageDialog(null, "Please enter a number between 2 and 10.");
+		            }
+		        } catch (NumberFormatException e) {
+		            // Handle invalid input
+		            JOptionPane.showMessageDialog(null, "Invalid input. Please enter a number between 2 and 10.");
+		        }
+		    }
+
+		    return count;
+		    
+	 }
+
 
 	public Player[] getPlayers() {
 		return players;
@@ -217,7 +243,7 @@ public class Game {
 		return false;
 	}
 
-	//if it's PC's turn, play it for pc
+	//if it's CPU's turn, play it for CPU
 	public void playPC(ViewCard topCard) {		
 		
 		if (cpu.isMyTurn()) {

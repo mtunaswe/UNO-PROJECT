@@ -17,11 +17,26 @@ public class Rules {
 	private Game game;
 	private Session session;
 	private Stack<ViewCard> playedCards;
+	
+	public static Color[] getUNO_COLORS() {
+		return UNO_COLORS;
+	}
+
+
+	public void setUNO_COLORS(Color[] uNO_COLORS) {
+		UNO_COLORS = uNO_COLORS;
+	}
+
 	public boolean canPlay;
 
 	InfoPanel infoPanel = new InfoPanel();
 	CardListener CARDLISTENER = new CardListener();
-	Color[] UNO_COLORS = {Color.RED, Color.BLUE, Color.GREEN, Color.YELLOW};
+	
+	public static Color RED = new Color(216, 46, 63);
+	public static Color BLUE = new Color(53, 129, 216);
+	public static Color GREEN = new Color(40, 204, 45);
+	public static Color YELLOW = new Color(255, 225, 53);
+	public static Color[] UNO_COLORS = {RED, BLUE, GREEN, YELLOW};
 
 	public Rules() {
 		//mode = requestMode();

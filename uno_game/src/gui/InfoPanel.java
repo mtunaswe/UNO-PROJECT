@@ -17,18 +17,18 @@ public class InfoPanel extends JPanel {
 	private String error;
 	private String text;
 	private int panelCenter;
+	private String sessionName;
 	
 	private int rest = 0;
 	
-	public InfoPanel(){
-		setPreferredSize(new Dimension(275,200));
-		setOpaque(false);
-		error = "";
-		text = "Game Started";
-		
-		updateText(text);
-	}
-	
+	public InfoPanel() {
+        setPreferredSize(new Dimension(275, 200));
+        setOpaque(false);
+        error = "";
+        text = "Game Started";
+        sessionName = "Session 1";
+        updateText(text);
+    }
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		panelCenter = getWidth()/2;
@@ -36,6 +36,7 @@ public class InfoPanel extends JPanel {
 		printMessage(g);
 		printError(g);
 		printDetail(g);
+		printSessionName(g);
 	}
 
 	private void printError(Graphics g) {
@@ -85,8 +86,16 @@ public class InfoPanel extends JPanel {
 		
 		text = String.valueOf(rest);
 		xPos = panelCenter - fm.stringWidth(text) / 2;
-		//g.drawString(text, xPos, 190);
+		g.drawString(text, xPos, 190);
 	}
+	
+	private void printSessionName(Graphics g) {
+        Font adjustedFont = new Font("Cabin", Font.BOLD, 25);
+        FontMetrics fm = this.getFontMetrics(adjustedFont);
+        g.setColor(new Color(0, 0, 0));
+        int xPos = panelCenter - fm.stringWidth(sessionName) / 2;
+        g.drawString(sessionName, xPos, 140);
+    }
 
 	public void updateText(String newText) {
 		text = newText;

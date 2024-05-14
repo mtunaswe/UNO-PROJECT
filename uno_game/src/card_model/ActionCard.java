@@ -19,10 +19,10 @@ public class ActionCard extends Card{
     public boolean match(Card card) {
         if (card instanceof ActionCard) {
             ActionCard otherActionCard= (ActionCard) card;
-            return (this.value.equals(otherActionCard.getCardValue()) || this.cardColor.equals(otherActionCard.getColor()));
+            return (this.value.equals(otherActionCard.getCardValue()) || this.getColor().equals(otherActionCard.getColor()));
         }
         
-        return this.cardColor.equals(card.cardColor);
+        return this.getColor().equals(card.getColor());
     }
 
 
@@ -42,16 +42,5 @@ public class ActionCard extends Card{
         return cardColor + " " + value;
     }
 	
-
-
-
-
-
-
-
-
-
-
-
 
 }
