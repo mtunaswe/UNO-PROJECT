@@ -7,6 +7,7 @@ public class UserInfo {
 	private int losses;
 	private int totalScore;
 	private int totalGames;
+	private int rank;
 	
 	public UserInfo(String nickname, String password, int wins, int losses, int totalScore, int totalGames) {
 		this.nickname = nickname;
@@ -55,7 +56,17 @@ public class UserInfo {
 
 	public void setTotalScore(int totalScore) {
 		this.totalScore = totalScore;
+		
+		
 	}
+	
+	public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
 
 	public int getTotalGames() {
 		return totalGames;
@@ -65,6 +76,18 @@ public class UserInfo {
 		this.totalGames = totalGames;
 	}
 	
+	public double getWinLossRatio() {
+        return (losses == 0) ? wins : (double) wins / losses;
+    }
+
+    public double getAverageScorePerGame() {
+        return (totalGames == 0) ? totalScore : (double) totalScore / totalGames;
+    }
+	
+    @Override
+    public String toString() {
+        return nickname + " - Score: " + totalScore;
+    }
 	
 	
 

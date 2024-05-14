@@ -5,6 +5,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 
 import game_model.UserInfo;
 import game_model.UserSession;
@@ -92,22 +93,25 @@ public class MainMenu {
 		JButton btnNewButton_3 = new JButton("LEADERBOARD");
 		btnNewButton_3.setFont(new Font("Cabin", Font.BOLD, 15));
 		btnNewButton_3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				LeaderBoard leaderboard = new LeaderBoard();
+		    public void actionPerformed(ActionEvent e) {
+		        LeaderBoard_stats leaderboard = new LeaderBoard_stats();
 		        leaderboard.setVisible(true);
-			}
+		    }
 		});
 		btnNewButton_3.setBounds(283, 11, 143, 23);
 		frame.getContentPane().add(btnNewButton_3);
+
 		
 		JButton btnNewButton_3_1 = new JButton("STATS");
 		btnNewButton_3_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				UserInfo currentUser = UserSession.getCurrentUser(); // Assuming you have a session management
-		        if (currentUser != null) {
-		            UserStats userStats = new UserStats(currentUser.getNickname());
-		            userStats.setVisible(true);
-		        }
+				UserInfo currentUser = UserSession.getCurrentUser();
+				if (currentUser != null) {
+                    UserStats userStats = new UserStats(currentUser.getNickname());
+                    userStats.setVisible(true);
+                } else {
+                    JOptionPane.showMessageDialog(frame, "No user is currently logged in.", "Error", JOptionPane.ERROR_MESSAGE);
+                }
 			}
 		});
 		btnNewButton_3_1.setFont(new Font("Cabin", Font.BOLD, 15));
