@@ -18,8 +18,6 @@ public class InfoPanel extends JPanel {
 	private String text;
 	private int panelCenter;
 	
-	private int you = 0;
-	private int pc = 0;
 	private int rest = 0;
 	
 	public InfoPanel(){
@@ -64,34 +62,26 @@ public class InfoPanel extends JPanel {
 		int xPos = panelCenter - fm.stringWidth(text) / 2;
 		
 		g.setFont(adjustedFont);
-		g.setColor(new Color(228,108,10));
+		g.setColor(new Color(0,0,0));
 		g.drawString(text, xPos, 75);		
 	}
 	
 	private void printDetail(Graphics g){
 		Font adjustedFont = new Font("Cabin", Font.BOLD,	25);	
 		FontMetrics fm = this.getFontMetrics(adjustedFont);
-		g.setColor(new Color(127,127,127));
+		g.setColor(new Color(0,0,0));
 		
 		//Determine the width of the word to position
-		String text = "Played Cards";
+		
+		text = "Remaining Cards: " + rest;
 		int xPos = panelCenter - fm.stringWidth(text) / 2;
-		
-		g.setFont(adjustedFont);
-		g.drawString(text, xPos, 120);
-		
-		text = "Remaining: " + rest;
-		xPos = panelCenter - fm.stringWidth(text) / 2;
 		g.drawString(text, xPos, 180);
+	
 		
 		//Details
 		adjustedFont = new Font("Cabin", Font.PLAIN,	20);
 		g.setFont(adjustedFont);
 		fm = this.getFontMetrics(adjustedFont);
-		
-		text = "You : "+you + "  PC : " + pc;
-		xPos = panelCenter - fm.stringWidth(text) / 2;
-		g.drawString(text, xPos, 140);
 		
 		text = String.valueOf(rest);
 		xPos = panelCenter - fm.stringWidth(text) / 2;
@@ -107,8 +97,6 @@ public class InfoPanel extends JPanel {
 	}
 	
 	public void setDetail(int[] playedCards, int remaining){
-		you = playedCards[1];
-		pc = playedCards[0];
 		rest = remaining;
 	}
 }

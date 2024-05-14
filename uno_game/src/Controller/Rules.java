@@ -4,17 +4,14 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 
-import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 
-import Controller.CardListener;
-import card_model.ActionCard;
 import card_model.WildCard;
 import game_model.Game;
 import game_model.Player;
+import gui.InfoPanel;
 import gui.Session;
 import gui.ViewCard;
-import gui.InfoPanel;
 
 public class Rules {
 	private Game game;

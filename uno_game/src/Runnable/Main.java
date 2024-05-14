@@ -1,10 +1,9 @@
 package Runnable;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
+import gui.LoginPage;
 import gui.MainFrame;
 
 @SuppressWarnings("unused")
@@ -15,10 +14,10 @@ public class Main {
 		//Create Frame and invoke it.
 		SwingUtilities.invokeLater(new Runnable() {					
 			public void run() {
-				JFrame frame = new MainFrame();
+				JFrame frame = new LoginPage();
 				frame.setVisible(true);
 				frame.setResizable(false);
-				frame.setLocation(200, 100);
+				frame.setLocation(500, 150);
 				frame.pack();
 				frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);				
 			}

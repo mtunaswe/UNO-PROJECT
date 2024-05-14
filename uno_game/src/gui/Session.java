@@ -1,6 +1,5 @@
 package gui;
 
-
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -10,39 +9,70 @@ import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
-import game_model.Player;
 import game_model.Game;
+import game_model.Player;
 
-public class Session extends JPanel {
+
+public class Session extends JPanel{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
 	private List<JPanel> playerPanels; // General JPanel to handle both PlayerPanel and CPUPanel
     private TablePanel table;
-    private Game game;
-
-    public Session(Game newGame, ViewCard firstCard) {
-        setPreferredSize(new Dimension(960, 720));
-        setBackground(new Color(30, 36, 40));
-        setLayout(new BorderLayout());
+    private static Game game;
+	
+	public Session(Game newGame, ViewCard firstCard) {
+		setPreferredSize(new Dimension(960, 720));
+        setBackground(new Color(176,196,222));
 
         game = newGame;
         
         playerPanels = new ArrayList<>();
         setPlayers();
         table = new TablePanel(firstCard);
+        
+        // Container for CPU panels
+        JPanel eastCpuArea = new JPanel();
+        JPanel westCpuArea = new JPanel();
+        JPanel northCpuArea = new JPanel();
 
-        JPanel playerArea = new JPanel();
-        playerArea.setLayout(new BoxLayout(playerArea, BoxLayout.Y_AXIS));
-        for (JPanel panel : playerPanels) {
-            panel.setOpaque(false);
-            playerArea.add(panel);
-        }
+        // Layout settings for each area
+        eastCpuArea.setLayout(new BoxLayout(eastCpuArea, BoxLayout.Y_AXIS));
+        westCpuArea.setLayout(new BoxLayout(westCpuArea, BoxLayout.Y_AXIS));
+        northCpuArea.setLayout(new BoxLayout(northCpuArea, BoxLayout.X_AXIS));
 
-        add(playerArea, BorderLayout.CENTER);
+        // Distribute CPU panels
+        distributeCPUPanels(eastCpuArea, westCpuArea, northCpuArea);
+
+        // Applying a border to ensure panels do not touch edges
+        eastCpuArea.setBorder(new EmptyBorder(10, 10, 10, 10));
+        westCpuArea.setBorder(new EmptyBorder(10, 10, 10, 10));
+        northCpuArea.setBorder(new EmptyBorder(10, 10, 10, 10));
+
+      
+        setLayout(new BorderLayout());
+        add(northCpuArea, BorderLayout.NORTH);
+        add(westCpuArea, BorderLayout.WEST);
         add(table, BorderLayout.CENTER);
+        add(eastCpuArea, BorderLayout.EAST);
+        add(playerPanels.get(0), BorderLayout.SOUTH); // Human player in the south
+
+       
+    }
+	
+	private void distributeCPUPanels(JPanel east, JPanel west, JPanel north) {
+        int count = 1; // Start from 1 to skip human player
+        for (JPanel panel : playerPanels) {
+            if (panel instanceof CPUPanel) {
+                if (count % 3 == 1) north.add(panel);
+                else if (count % 3 == 2) east.add(panel);
+                else west.add(panel);
+                count++;
+            }
+        }
     }
 
     private void setPlayers() {
@@ -75,6 +105,6 @@ public class Session extends JPanel {
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 	}
+	
 }
-
 

@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.awt.event.ActionEvent;
+import javax.swing.SwingConstants;
 
 public class SignUpPage {
 
@@ -75,50 +76,59 @@ public class SignUpPage {
 			}
 		});
 		
+		JLabel lblNewLabel_1_2_1 = new JLabel("PASSWORD");
+		lblNewLabel_1_2_1.setToolTipText("");
+		lblNewLabel_1_2_1.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNewLabel_1_2_1.setForeground(new Color(255, 255, 255));
+		lblNewLabel_1_2_1.setFont(new Font("Cabin", Font.BOLD, 16));
+		lblNewLabel_1_2_1.setBounds(209, 269, 183, 23);
+		frame.getContentPane().add(lblNewLabel_1_2_1);
+		
 		passwordField= new JPasswordField();
-		passwordField.setBounds(266, 254, 238, 32);
+		passwordField.setBounds(304, 254, 238, 32);
 		frame.getContentPane().add(passwordField);
 		
 		passwordField_1 = new JPasswordField();
-		passwordField_1.setBounds(266, 211, 238, 32);
+		passwordField_1.setBounds(304, 207, 238, 32);
 		frame.getContentPane().add(passwordField_1);
 		
 		btnGoBack.setFont(new Font("Cabin", Font.BOLD, 14));
 		btnGoBack.setBounds(496, 351, 141, 32);
 		frame.getContentPane().add(btnGoBack);
 		
-		JLabel lblNewLabel_2 = new JLabel("Welcome to UNO Game!");
+		JLabel lblNewLabel_2 = new JLabel("WELCOME TO UNO GAME!");
 		lblNewLabel_2.setForeground(new Color(255, 255, 255));
 		lblNewLabel_2.setFont(new Font("Cabin", Font.PLAIN, 30));
-		lblNewLabel_2.setBounds(68, 63, 319, 72);
+		lblNewLabel_2.setBounds(10, 28, 455, 72);
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		JLabel lblNewLabel_1 = new JLabel("USERNAME");
-		lblNewLabel_1.setForeground(Color.WHITE);
+		lblNewLabel_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_1.setFont(new Font("Cabin", Font.BOLD, 16));
-		lblNewLabel_1.setBounds(68, 171, 108, 23);
+		lblNewLabel_1.setBounds(209, 173, 108, 23);
 		frame.getContentPane().add(lblNewLabel_1);
 		
 		JLabel lblNewLabel_1_1 = new JLabel("PASSWORD");
-		lblNewLabel_1_1.setForeground(Color.WHITE);
+		lblNewLabel_1_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_1_1.setFont(new Font("Cabin", Font.BOLD, 16));
-		lblNewLabel_1_1.setBounds(68, 214, 95, 23);
+		lblNewLabel_1_1.setBounds(209, 214, 95, 23);
 		frame.getContentPane().add(lblNewLabel_1_1);
 		
-		JLabel lblNewLabel_1_2 = new JLabel("CONFIRM PASSWORD");
-		lblNewLabel_1_2.setForeground(Color.WHITE);
+		JLabel lblNewLabel_1_2 = new JLabel("CONFIRM");
+		lblNewLabel_1_2.setHorizontalAlignment(SwingConstants.LEFT);
+		lblNewLabel_1_2.setForeground(new Color(255, 255, 255));
 		lblNewLabel_1_2.setFont(new Font("Cabin", Font.BOLD, 16));
-		lblNewLabel_1_2.setBounds(68, 263, 183, 23);
+		lblNewLabel_1_2.setBounds(209, 254, 183, 23);
 		frame.getContentPane().add(lblNewLabel_1_2);
 		
 		textField = new JTextField();
 		textField.setColumns(10);
-		textField.setBounds(266, 168, 238, 32);
+		textField.setBounds(304, 164, 238, 32);
 		frame.getContentPane().add(textField);
 		
 		JButton btnNewButton = new JButton("SIGN-UP\r\n");
 		btnNewButton.setFont(new Font("Cabin", Font.BOLD, 14));
-		btnNewButton.setBounds(266, 305, 141, 32);
+		btnNewButton.setBounds(337, 351, 141, 32);
 		
 		btnNewButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -164,8 +174,9 @@ public class SignUpPage {
 		
 		
 		JToggleButton tglbtnNewToggleButton = new JToggleButton("Show/ Hide");
+		tglbtnNewToggleButton.setHorizontalAlignment(SwingConstants.LEADING);
 		tglbtnNewToggleButton.setFont(new Font("Cabin", Font.BOLD, 12));
-		tglbtnNewToggleButton.setBounds(506, 215, 106, 23);
+		tglbtnNewToggleButton.setBounds(552, 211, 107, 23);
 		
 		tglbtnNewToggleButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -180,8 +191,9 @@ public class SignUpPage {
 		frame.getContentPane().add(tglbtnNewToggleButton);
 		
 		JToggleButton tglbtnNewToggleButton_1 = new JToggleButton("Show/ Hide");
+		tglbtnNewToggleButton_1.setHorizontalAlignment(SwingConstants.LEADING);
 		tglbtnNewToggleButton_1.setFont(new Font("Cabin", Font.BOLD, 12));
-		tglbtnNewToggleButton_1.setBounds(506, 258, 106, 23);
+		tglbtnNewToggleButton_1.setBounds(551, 258, 108, 23);
 		
 		tglbtnNewToggleButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -196,8 +208,8 @@ public class SignUpPage {
 		frame.getContentPane().add(tglbtnNewToggleButton_1);
 		
 		JLabel lblNewLabel = new JLabel("");
-		lblNewLabel.setIcon(new ImageIcon(getClass().getResource("/resources/background.jpg")));
-		lblNewLabel.setBounds(0, 0, 680, 413);
+		lblNewLabel.setIcon(new ImageIcon(SignUpPage.class.getResource("/resources/background2.jpg")));
+		lblNewLabel.setBounds(0, 0, 647, 394);
 		frame.getContentPane().add(lblNewLabel);
 		
 		

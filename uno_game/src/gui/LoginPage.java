@@ -9,6 +9,9 @@ import javax.swing.JButton;
 import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 
+import game_model.UserInfo;
+import game_model.UserSession;
+
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
@@ -59,46 +62,72 @@ public class LoginPage extends JFrame {
 		JLabel lblNewLabel_4 = new JLabel("");
 		lblNewLabel_4.setIcon(new ImageIcon(getClass().getResource("/resources/logo.png")));
 		lblNewLabel_4.setBounds(202, 25, 177, 156);
-		add(lblNewLabel_4);
+		getContentPane().add(lblNewLabel_4);
 		
 		textField = new JTextField();
 		textField.setBounds(162, 183, 238, 41);
-		add(textField);
+		getContentPane().add(textField);
 		textField.setColumns(10);
 		
 		passwordField = new JPasswordField();
 		passwordField.setBounds(162, 235, 238, 39);
-		add(passwordField);
+		getContentPane().add(passwordField);
 		
 		JLabel lblNewLabel = new JLabel("USERNAME");
 		lblNewLabel.setForeground(new Color(255, 255, 255));
 		lblNewLabel.setFont(new Font("Cabin", Font.BOLD, 16));
 		lblNewLabel.setBounds(51, 190, 108, 23);
-		add(lblNewLabel);
+		getContentPane().add(lblNewLabel);
 		
 		JLabel lblNewLabel_1 = new JLabel("PASSWORD");
 		lblNewLabel_1.setForeground(new Color(255, 255, 255));
 		lblNewLabel_1.setFont(new Font("Cabin", Font.BOLD, 16));
 		lblNewLabel_1.setBounds(51, 241, 95, 23);
-		add(lblNewLabel_1);
+		getContentPane().add(lblNewLabel_1);
 		
 		JButton btnNewButton = new JButton("LOGIN");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				File file = new File("src/user.txt");
 				String username = textField.getText();
 		        char[] passwordChars = passwordField.getPassword();
 		        String password = new String(passwordChars);
 		        
 		        if (userValidation(username, password)) {
 		            goToMainMenu();
+		            
+		            try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+		                String line;
+		                while ((line = reader.readLine()) != null) {
+		                    String[] details = line.split(", ");
+		                    if (details[0].equals(username)){
+		                        int wins = Integer.parseInt(details[2]);
+		                        int losses = Integer.parseInt(details[3]);
+		                        int totalScore = Integer.parseInt(details[4]);
+		                        int totalGames = Integer.parseInt(details[5]);
+		                        UserInfo loggedInUser = new UserInfo(username, password, wins, losses, totalScore, totalGames);
+		    		            UserSession.setCurrentUser(loggedInUser);
+		                       
+		                    }
+		                }
+		            } catch (IOException e1) {
+		                System.err.println("Error reading the user data file.");
+		                e1.printStackTrace();
+		            } catch (NumberFormatException e1) {
+		                System.err.println("Error parsing integer from user data.");
+		                e1.printStackTrace();
+		            
+		            }
+		                
+		           
+		      
 		        }
 			}
-
-			
-		});
+			});	
+		
 		btnNewButton.setFont(new Font("Cabin", Font.BOLD, 14));
 		btnNewButton.setBounds(216, 289, 141, 32);
-		add(btnNewButton);
+		getContentPane().add(btnNewButton);
 		
 		JToggleButton tglbtnNewToggleButton = new JToggleButton("Show/ Hide");
 		tglbtnNewToggleButton.setFont(new Font("Cabin", Font.BOLD, 12));
@@ -111,25 +140,32 @@ public class LoginPage extends JFrame {
 		        }
 				
 			}
-		});
+		}
+		);
+		
 		tglbtnNewToggleButton.setBounds(410, 242, 106, 23);
-		add(tglbtnNewToggleButton);
+		getContentPane().add(tglbtnNewToggleButton);
 		
 		JButton btnRegister = new JButton("REGISTER");
 		btnRegister.setFont(new Font("Cabin", Font.BOLD, 14));
 		btnRegister.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SignUpPage signUpPage = new SignUpPage();
-                signUpPage.frame.setVisible(true);
+				signUpPage.frame.setVisible(true);
+				signUpPage.frame.setResizable(false);
+				signUpPage.frame.setLocation(500, 150);
 			}
 		});
+		
 		btnRegister.setBounds(216, 332, 141, 32);
-		add(btnRegister);
+		getContentPane().add(btnRegister);
 		
 		JLabel lblNewLabel_3 = new JLabel("");
 		lblNewLabel_3.setIcon(new ImageIcon(getClass().getResource("/resources/background.jpg")));
 		lblNewLabel_3.setBounds(0, 0, 661, 431);
-		add(lblNewLabel_3);
+		getContentPane().add(lblNewLabel_3);
+		
+		
 		}
 		
 		private boolean userValidation(String username, String password) {
@@ -164,6 +200,8 @@ public class LoginPage extends JFrame {
 		private void goToMainMenu() {
 			MainMenu mainMenu = new MainMenu();
 			mainMenu.frame.setVisible(true);
+			mainMenu.frame.setResizable(false);
+			mainMenu.frame.setLocation(500, 150);
 			dispose();
 			
 			

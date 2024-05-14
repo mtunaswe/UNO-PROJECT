@@ -5,6 +5,10 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+
+import game_model.UserInfo;
+import game_model.UserSession;
+
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -77,21 +81,37 @@ public class MainMenu {
 			}
 		});
 			
-		btnNewButton_2.setBounds(347, 229, 89, 23);
+		btnNewButton_2.setBounds(337, 229, 89, 23);
 		frame.getContentPane().add(btnNewButton_2);
 		
 		JLabel lblNewLabel = new JLabel("");
 		lblNewLabel.setIcon(new ImageIcon(getClass().getResource("/resources/logo.png")));
-		lblNewLabel.setBounds(108, 11, 263, 177);
+		lblNewLabel.setBounds(107, 11, 184, 177);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JButton btnNewButton_3 = new JButton("LEADERBOARD");
 		btnNewButton_3.setFont(new Font("Cabin", Font.BOLD, 15));
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				LeaderBoard leaderboard = new LeaderBoard();
+		        leaderboard.setVisible(true);
 			}
 		});
-		btnNewButton_3.setBounds(293, 199, 143, 23);
+		btnNewButton_3.setBounds(283, 11, 143, 23);
 		frame.getContentPane().add(btnNewButton_3);
+		
+		JButton btnNewButton_3_1 = new JButton("STATS");
+		btnNewButton_3_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				UserInfo currentUser = UserSession.getCurrentUser(); // Assuming you have a session management
+		        if (currentUser != null) {
+		            UserStats userStats = new UserStats(currentUser.getNickname());
+		            userStats.setVisible(true);
+		        }
+			}
+		});
+		btnNewButton_3_1.setFont(new Font("Cabin", Font.BOLD, 15));
+		btnNewButton_3_1.setBounds(337, 199, 89, 23);
+		frame.getContentPane().add(btnNewButton_3_1);
 	}
 }

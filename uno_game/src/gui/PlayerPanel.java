@@ -26,7 +26,7 @@ public class PlayerPanel extends JPanel {
 	private Player player;
 	private String name;
 
-	private Box myLayout;
+	private Box layout;
 	private JLayeredPane cardHolder;
 	private Box controlPanel;
 
@@ -41,7 +41,7 @@ public class PlayerPanel extends JPanel {
 	public PlayerPanel(Player newPlayer) {
 		setPlayer(newPlayer);
 
-		myLayout = Box.createHorizontalBox();
+		layout = Box.createHorizontalBox();
 		cardHolder = new JLayeredPane();
 		cardHolder.setPreferredSize(new Dimension(600, 175));
 
@@ -49,10 +49,9 @@ public class PlayerPanel extends JPanel {
 		setCards();
 		setControlPanel();
 
-		myLayout.add(cardHolder);
-		myLayout.add(Box.createHorizontalStrut(40));
-		myLayout.add(controlPanel);
-		add(myLayout);
+		layout.add(cardHolder);
+		layout.add(controlPanel);
+		add(layout);
 
 		// Register Listeners
 		handler = new ButtonHandler();
@@ -108,7 +107,7 @@ public class PlayerPanel extends JPanel {
 		sayUNO.setFocusable(false);
 		
 		nameLbl = new JLabel(name);
-		nameLbl.setForeground(Color.WHITE);
+		nameLbl.setForeground(Color.BLACK);
 		nameLbl.setFont(new Font("Cabin", Font.BOLD, 15));
 
 		controlPanel = Box.createVerticalBox();
