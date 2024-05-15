@@ -4,9 +4,7 @@ import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
 import gui.LoginPage;
-import gui.MainFrame;
 
-@SuppressWarnings("unused")
 public class Main {
 	
 	public static void main(String[] args) {

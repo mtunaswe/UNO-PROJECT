@@ -9,7 +9,6 @@ import java.awt.Graphics2D;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
-import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
@@ -41,6 +40,8 @@ public class ViewCard extends JPanel {
     int cardHeight = CARDSIZE.height;
 
     private Image backImage;
+    private Image skipImage;
+    private Image reverseImage;
 
     public static int NUMBERS = 1;
     public static int ACTION = 2;
@@ -51,11 +52,7 @@ public class ViewCard extends JPanel {
         this.setPreferredSize(CARDSIZE);
         this.setBorder(defaultBorder);
         this.addMouseListener(new MouseHandler());
-        try {
-            backImage = ImageIO.read(new File("C:\\Users\\merta\\git\\UNO-PROJECT\\uno_game\\src\\resources\\uno_back_card.png")); // Update with actual image path
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loadImages();
     }
 
     // Constructor for PlayerPanel
@@ -68,9 +65,19 @@ public class ViewCard extends JPanel {
         this.setBorder(defaultBorder);
 
         this.addMouseListener(new MouseHandler());
+        loadImages();
+    }
+
+    private void loadImages() {
         try {
-            backImage = ImageIO.read(new File("C:\\Users\\merta\\git\\UNO-PROJECT\\uno_game\\src\\resources\\uno_back_card.png")); 
+            backImage = ImageIO.read(getClass().getResource("/resources/uno_back_card.png"));
+            skipImage = ImageIO.read(getClass().getResource("/resources/skipCard.png"));
+            reverseImage = ImageIO.read(getClass().getResource("/resources/reverseCard.png"));
         } catch (IOException e) {
+            System.err.println("Error loading images: " + e.getMessage());
+            e.printStackTrace();
+        } catch (Exception e) {
+            System.err.println("Unexpected error: " + e.getMessage());
             e.printStackTrace();
         }
     }
@@ -86,55 +93,74 @@ public class ViewCard extends JPanel {
     }
 
     private void displayFront(Graphics g) {
-        Graphics2D g2 = (Graphics2D) g;
+    	Graphics2D g2 = (Graphics2D) g;
+    	
+    	g2.setColor(Color.WHITE);
+    	g2.fillRect(0, 0, cardWidth, cardHeight);
 
-        g2.setColor(Color.WHITE);
-        g2.fillRect(0, 0, cardWidth, cardHeight);
+    	int margin = 5;
+    	g2.setColor(cardColor);
+    	g2.fillRect(margin, margin, cardWidth - 2 * margin, cardHeight - 2 * margin);
 
-        int margin = 5;
-        g2.setColor(cardColor);
-        g2.fillRect(margin, margin, cardWidth - 2 * margin, cardHeight - 2 * margin);
+    	g2.setColor(Color.WHITE);
+    	AffineTransform org = g2.getTransform();
+    	g2.rotate(45, cardWidth * 3 / 4, cardHeight * 3 / 4);
 
-        g2.setColor(Color.WHITE);
-        AffineTransform org = g2.getTransform();
-        g2.rotate(45, cardWidth * 3 / 4, cardHeight * 3 / 4);
-
-        g2.fillOval(0, cardHeight * 1 / 4, cardWidth * 3 / 5, cardHeight);
-        g2.setTransform(org);
+    	g2.fillOval(0, cardHeight * 1 / 4, cardWidth * 3 / 5, cardHeight);
+    	g2.setTransform(org);
+ 
 
         if (value != null) {
-            // Value in the center
-            Font defaultFont = new Font("Cabin", Font.BOLD, cardWidth / 2 + 5);
-            FontMetrics fm = this.getFontMetrics(defaultFont);
-            int StringWidth = fm.stringWidth(value)/2;
-            int FontHeight = defaultFont.getSize() * 1 / 3;
+            Image imageToDraw = null;
+            if (value.equals("Skip")) {
+                imageToDraw = skipImage;
+            } else if (value.equals("Reverse")) {
+                imageToDraw = reverseImage;
+            }
 
-            g2.setColor(cardColor);
-            g2.setFont(defaultFont);
-            g2.drawString(value, cardWidth / 2 - StringWidth, cardHeight / 2 + FontHeight);
+            if (imageToDraw != null) {
+                // Draw the center image smaller
+                int centerImgWidth = cardWidth / 2;
+                int centerImgHeight = cardHeight / 2;
+                g2.drawImage(imageToDraw, (cardWidth - centerImgWidth) / 2, (cardHeight - centerImgHeight) / 2, centerImgWidth, centerImgHeight, this);
 
-            // Value in the top-left corner
-            defaultFont = new Font("Cabin", Font.ITALIC, cardWidth / 5);
-            fm = this.getFontMetrics(defaultFont);
-            StringWidth = fm.stringWidth(value) / 2;
-            FontHeight = defaultFont.getSize() * 1 / 3;
+                // Draw small icons in the corners
+                int smallImgSize = 20;
+                g2.drawImage(imageToDraw, margin, margin, smallImgSize, smallImgSize, this); // top-left
+                g2.drawImage(imageToDraw, cardWidth - margin - smallImgSize, cardHeight - margin - smallImgSize, smallImgSize, smallImgSize, this); // bottom-right
+            } else {
+            	 // Value in the center
+                Font defaultFont = new Font("Cabin", Font.BOLD, cardWidth / 2 + 5);
+                FontMetrics fm = this.getFontMetrics(defaultFont);
+                int StringWidth = fm.stringWidth(value)/2;
+                int FontHeight = defaultFont.getSize() * 1 / 3;
 
-            g2.setColor(Color.white);
-            g2.setFont(defaultFont);
-            g2.drawString(value, 2 * margin, 5 * margin);
+                g2.setColor(cardColor);
+                g2.setFont(defaultFont);
+                g2.drawString(value, cardWidth / 2 - StringWidth, cardHeight / 2 + FontHeight);
 
-            // Value in the bottom-right corner
-            StringWidth = fm.stringWidth(value) / 2;
-            FontHeight = defaultFont.getSize() * 1 / 3;
+                // Value in the top-left corner
+                defaultFont = new Font("Cabin", Font.ITALIC, cardWidth / 5);
+                fm = this.getFontMetrics(defaultFont);
+                StringWidth = fm.stringWidth(value) / 2;
+                FontHeight = defaultFont.getSize() * 1 / 3;
 
-            g2.drawString(value, cardWidth - 2 * margin - fm.stringWidth(value), cardHeight - 2 * margin);
+                g2.setColor(Color.white);
+                g2.setFont(defaultFont);
+                g2.drawString(value, 2 * margin, 5 * margin);
+
+                // Value in the bottom-right corner
+                StringWidth = fm.stringWidth(value) / 2;
+                FontHeight = defaultFont.getSize() * 1 / 3;
+
+                g2.drawString(value, cardWidth - 2 * margin - fm.stringWidth(value), cardHeight - 2 * margin);
+    
+            }
         }
-
     }
 
     private void displayBack(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
-
         if (backImage != null) {
             g2.drawImage(backImage, 0, 0, getWidth(), getHeight(), this);
         } else {
@@ -166,7 +192,6 @@ public class ViewCard extends JPanel {
      * Mouse Listener
      */
     class MouseHandler extends MouseAdapter {
-
         public void mouseEntered(MouseEvent e) {
             setBorder(focusedBorder);
         }

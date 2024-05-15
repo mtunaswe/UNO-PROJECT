@@ -9,7 +9,6 @@ import javax.swing.JOptionPane;
 import card_model.WildCard;
 import game_model.Game;
 import game_model.Player;
-import gui.InfoPanel;
 import gui.Session;
 import gui.ViewCard;
 
@@ -24,7 +23,6 @@ public class Rules {
 
 	public boolean canPlay;
 
-	InfoPanel infoPanel = new InfoPanel();
 	CardListener CARDLISTENER = new CardListener();
 	
 	public static Color RED = new Color(216, 46, 63);
@@ -33,6 +31,10 @@ public class Rules {
 	public static Color YELLOW = new Color(255, 225, 53);
 	public static Color[] UNO_COLORS = {RED, BLUE, GREEN, YELLOW};
 
+	/**
+	 * Constructs the Rules controller for the game, initializing the game state,
+	 * setting up the first card, and preparing the game session.
+	 */
 	public Rules() {
 		//mode = requestMode();
 		
@@ -50,8 +52,12 @@ public class Rules {
 		canPlay = true;
 	}
 
-	
-	//custom settings for the first card
+	/**
+	 * Custom settings for the first card, if it 
+	 * is a WildCard.
+	 *
+	 * @param firstCard the first card to be modified
+	 */
 	private void modifyFirstCard(ViewCard firstCard) {
 		firstCard.removeMouseListener(CARDLISTENER);
 		if (firstCard instanceof WildCard) {
@@ -64,19 +70,27 @@ public class Rules {
 		}
 	}
 	
-	//return Main Panel
+	/**
+	 * Returns the main game session.
+	 *
+	 * @return the current session
+	 */
 	public Session getSession() {
 		return this.session;
 	}
 	
 	
-	//request to play a card
+	/**
+	 * Requests to play a card and performs necessary checks and actions.
+	 *
+	 * @param clickedCard the card to be played
+	 */
 	public void playThisCard(ViewCard clickedCard) {
 
 		// Check player's turn
 		if (!isHisTurn(clickedCard)) {
-			infoPanel.setError("It's not your turn");
-			infoPanel.repaint();
+			game.getInfoPanel().setError("It's not your turn");
+			game.getInfoPanel().repaint();
 		} else {
 
 			// Card validation
@@ -86,7 +100,7 @@ public class Rules {
 				discardCards.add(clickedCard);
 				game.removePlayedCard(clickedCard);
 
-				// function cards ??
+				// function cards
 				switch (clickedCard.getClass().getSimpleName()) {
 				case "ActionCard":
 					performAction(clickedCard);
@@ -102,13 +116,11 @@ public class Rules {
 				session.updatePanel(clickedCard);
 				checkResults();
 			} else {
-				infoPanel.setError("invalid move");
-				infoPanel.repaint();
+				game.getInfoPanel().setError("invalid move");
+				game.getInfoPanel().repaint();
 			}
 			
 		}
-		
-		
 		
 		if(canPlay){
 			if(game.isPCsTurn()){
@@ -117,16 +129,23 @@ public class Rules {
 		}
 	}
 
-	//Check if the game is over
+	/**
+	 * Checks if the game is over and updates the game state accordingly.
+	 */
 	private void checkResults() {
 
 		if (game.isOver()) {
 			canPlay = false;
-			infoPanel.updateText("GAME OVER");
+			game.getInfoPanel().updateText("GAME OVER");
 		}
 	}
 	
-	//check player's turn
+	/**
+	 * Checks if it's the current player's turn to play the clicked card.
+	 *
+	 * @param clickedCard the card clicked by the player
+	 * @return true if it is the player's turn, false otherwise
+	 */
 	public boolean isHisTurn(ViewCard clickedCard) {
 
 		for (Player p : game.getPlayers()) {
@@ -137,7 +156,12 @@ public class Rules {
 	}
 	
 
-	//check if it is a valid card
+	/**
+	 * Checks if the move is valid according to the game rules.
+	 *
+	 * @param playedCard the card played by the player
+	 * @return true if the move is valid, false otherwise
+	 */
 	  private boolean isValidMove(ViewCard playedCard) {
 	        ViewCard topCard = peekTopCard();
 	        
@@ -149,26 +173,31 @@ public class Rules {
 	  }	
 	
 
-		
-
-	// ActionCards
+	/**
+	 * Performs the action of the action card played.
+	 *
+	 * @param actionCard the action card to be played
+	 */
 	private void performAction(ViewCard actionCard) {
         switch (actionCard.getCardValue()) {
-            case "DrawTwo":
+            case "+2":
                 game.drawPlus(2);
                 break;
             case "Skip":
                 game.switchTurn();
                 break;
             case "Reverse":
-                game.switchTurn();
-                
                 game.reverseDirection();
                 
                 break;
         }
     }
 
+	/**
+	 * Performs the action of the wild card played.
+	 *
+	 * @param functionCard the wild card to be played
+	 */
 	private void performWild(WildCard functionCard) {		
 
 		//System.out.println(game.whoseTurn());
@@ -195,6 +224,9 @@ public class Rules {
 			game.drawPlus(4);
 	}
 	
+	/**
+	 * Requests a card to be drawn from the deck.
+	 */
 	public void requestCard() {
 		game.drawCard(peekTopCard());
 		
@@ -206,13 +238,20 @@ public class Rules {
 		session.refreshPanel();
 	}
 
+	/**
+	 * Peeks at the top card on the discard stack.
+	 *
+	 * @return the top card on the discard stack
+	 */
 	public ViewCard peekTopCard() {
 		return discardCards.peek();
 	}
 
+	/**
+	 * Submits the action of saying "UNO" by the player.
+	 */
 	public void submitSaidUNO() {
 		game.setSaidUNO();
 	}
 
 }
-

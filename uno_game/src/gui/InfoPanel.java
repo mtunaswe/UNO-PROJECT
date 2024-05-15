@@ -38,24 +38,19 @@ public class InfoPanel extends JPanel {
     private void printError(Graphics g) {
         if (!error.isEmpty()) {
             Font adjustedFont = new Font("Cabin", Font.PLAIN, 25);
-
             FontMetrics fm = this.getFontMetrics(adjustedFont);
             int xPos = panelCenter - fm.stringWidth(error) / 2;
-
             g.setFont(adjustedFont);
             g.setColor(Color.red);
             g.drawString(error, xPos, 35);
-
-            error = "";
+            error = ""; // Clear the error after displaying
         }
     }
 
     private void printMessage(Graphics g) {
         Font adjustedFont = new Font("Cabin", Font.BOLD, 25);
-
         FontMetrics fm = this.getFontMetrics(adjustedFont);
         int xPos = panelCenter - fm.stringWidth(text) / 2;
-
         g.setFont(adjustedFont);
         g.setColor(new Color(0, 0, 0));
         g.drawString(text, xPos, 75);
@@ -65,7 +60,6 @@ public class InfoPanel extends JPanel {
         Font adjustedFont = new Font("Cabin", Font.BOLD, 25);
         FontMetrics fm = this.getFontMetrics(adjustedFont);
         g.setColor(new Color(0, 0, 0));
-
         String detailText = "Remaining Cards: " + rest;
         int xPos = panelCenter - fm.stringWidth(detailText) / 2;
         g.drawString(detailText, xPos, 180);
@@ -75,7 +69,6 @@ public class InfoPanel extends JPanel {
         Font adjustedFont = new Font("Cabin", Font.BOLD, 20);
         FontMetrics fm = this.getFontMetrics(adjustedFont);
         g.setColor(new Color(0, 0, 0));
-
         int xPos = panelCenter - fm.stringWidth(directionText) / 2;
         g.drawString(directionText, xPos, 140);
     }

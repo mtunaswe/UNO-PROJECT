@@ -5,18 +5,21 @@ import java.util.LinkedList;
 
 import Controller.CardListener;
 import Controller.Rules;
-import gui.ViewCard;  // Assuming ViewCard extends JComponent and wraps a Card
+import gui.ViewCard;
 
+/**
+ * The Deck class represents a deck of UNO cards.
+ * It initializes the deck with UNO cards, adds listeners to the cards,
+ * and provides methods to access the deck.
+ */
 public class Deck {
 
     private final Color[] UNO_COLORS = Rules.getUNO_COLORS();
     private final int[] UNO_NUMBERS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-    Character charREVERSE = '↺'; 		// Using the reverse symbol directly
-    Character charSKIP = '✘'; 			// Using the skip symbol directly
-
+   
     // ActionCard Functions
-    String REVERSE = charREVERSE.toString();
-    String SKIP = charSKIP.toString();
+    String REVERSE = "Reverse";
+    String SKIP = "Skip";
     String DRAW2 = "2+";
 
     // Wild card functions
@@ -27,6 +30,9 @@ public class Deck {
 
     private LinkedList<ViewCard> UNOcards;
 
+    /**
+     * Constructs a new Deck and initializes it with UNO cards.
+     */
     public Deck() {
         UNOcards = new LinkedList<ViewCard>();
         CardListener CARDLISTENER = new CardListener();
@@ -35,6 +41,10 @@ public class Deck {
         addCardListener(CARDLISTENER);
     }
 
+    /**
+     * Adds UNO cards to the deck.
+     * This method initializes the deck with number cards, action cards, and wild cards.
+     */
     private void addCards() {
         for (Color color : UNO_COLORS) {
             for (int num : UNO_NUMBERS) {
@@ -56,12 +66,22 @@ public class Deck {
         }
     }
 
+    /**
+     * Adds a mouse listener to each card in the deck.
+     *
+     * @param listener the CardListener to be added to the cards
+     */
     public void addCardListener(CardListener listener) {
         for (ViewCard card : UNOcards) {
             card.addMouseListener(listener);
         }
     }
 
+    /**
+     * Returns the list of cards in the deck.
+     *
+     * @return the list of cards in the deck
+     */
     public LinkedList<ViewCard> getCards() {
         return UNOcards;
     }
