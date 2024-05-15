@@ -36,6 +36,7 @@ public class TablePanel extends JPanel {
         topCard = firstCard;
         table = new JPanel();
         table.setBackground(new Color(64, 64, 64));
+         
 
         setTable();
         setComponents();
@@ -95,4 +96,6 @@ public class TablePanel extends JPanel {
 
         table.setBackground(background);
     }
+    
+    
 }

@@ -4,15 +4,14 @@ import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-import Controller.Rules;
 import gui.ViewCard;
 
 public class CardListener extends MouseAdapter{
-	ViewCard sourceCard;
-	Rules rules;
+	private ViewCard sourceCard;
+	private static Rules rules;
 	
 	public void setServer(Rules rules){
-		this.rules =  rules;
+		CardListener.rules =  rules;
 	}
 	
 	public void mousePressed(MouseEvent e) {		

@@ -14,7 +14,9 @@ public class MainFrame extends JFrame{
 	CardListener CARDLISTENER = new CardListener();
     ButtonListener BUTTONLISTENER = new ButtonListener();
 	
+	
 	public MainFrame(){	
+		
 		server = new Rules();
 		CARDLISTENER.setServer(server);
 		BUTTONLISTENER.setServer(server);

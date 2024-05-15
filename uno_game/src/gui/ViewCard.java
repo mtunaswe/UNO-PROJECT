@@ -106,7 +106,7 @@ public class ViewCard extends JPanel {
             // Value in the center
             Font defaultFont = new Font("Cabin", Font.BOLD, cardWidth / 2 + 5);
             FontMetrics fm = this.getFontMetrics(defaultFont);
-            int StringWidth = fm.stringWidth(value) / 2;
+            int StringWidth = fm.stringWidth(value)/2;
             int FontHeight = defaultFont.getSize() * 1 / 3;
 
             g2.setColor(cardColor);

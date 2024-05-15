@@ -2,6 +2,7 @@ package game_model;
 
 import java.util.LinkedList;
 
+import card_model.WildCard;
 import gui.ViewCard;
 
 public class Player {
@@ -9,17 +10,17 @@ public class Player {
 	private String name = null;
 	private boolean isMyTurn = false;
 	private boolean saidUNO = false;
-	private LinkedList<ViewCard> myCards;
+	private LinkedList<ViewCard> cards;
 	
 	private int playedCards = 0;
 	
 	public Player(){
-		myCards = new LinkedList<ViewCard>();
+		cards = new LinkedList<ViewCard>();
 	}
 	
 	public Player(String player){
 		setName(player);
-		myCards = new LinkedList<ViewCard>();
+		cards = new LinkedList<ViewCard>();
 	}
 	
 	public void setName(String newName){
@@ -30,32 +31,52 @@ public class Player {
 		return this.name;
 	}
 	public void obtainCard(ViewCard card){
-		myCards.add(card);
+		cards.add(card);
 	}
 	
 	public LinkedList<ViewCard> getAllCards(){
-		return myCards;
+		return cards;
 	}
 	
 	public int getTotalCards(){
-		return myCards.size();
+		return cards.size();
 	}
 	
 	public boolean hasCard(ViewCard thisCard){
-		return myCards.contains(thisCard);		
+		return cards.contains(thisCard);		
 	}
 	
 	public void removeCard(ViewCard thisCard){
-		myCards.remove(thisCard);
+		cards.remove(thisCard);
 		playedCards++;
 	}
+	
+	//Check if this card can be played
+	public boolean canPlay(ViewCard topCard, ViewCard newCard) {
+
+		// Color or value matches
+		if (topCard.getColor().equals(newCard.getColor())
+				|| topCard.getCardValue().equals(newCard.getCardValue()))
+			return true;
+		// if chosen wild card color matches
+		else if (topCard instanceof WildCard)
+			return ((WildCard) topCard).getWildColor().equals(newCard.getColor());
+
+		// suppose the new card is a wild card
+		else if (newCard instanceof WildCard)
+			return true;
+
+		// else
+		return false;
+		}
+	
 	
 	public int totalPlayedCards(){
 		return playedCards;
 	}
 	
 	public void toggleTurn(){
-		isMyTurn = (isMyTurn) ? false : true;
+		isMyTurn = !isMyTurn;
 	}
 	
 	public boolean isMyTurn(){
@@ -63,7 +84,7 @@ public class Player {
 	}
 	
 	public boolean hasCards(){
-		return (myCards.isEmpty()) ? false : true;
+		return !cards.isEmpty();
 	}
 	
 	public boolean getSaidUNO(){
@@ -79,6 +100,6 @@ public class Player {
 	}
 	
 	public void setCards(){
-		myCards = new LinkedList<ViewCard>();
+		cards = new LinkedList<ViewCard>();
 	}
 }

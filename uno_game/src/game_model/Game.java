@@ -5,13 +5,14 @@ import java.util.Stack;
 import javax.swing.JOptionPane;
 
 import gui.InfoPanel;
-import card_model.*;
 import gui.ViewCard;
 
 
 public class Game {
 	private Player[] players;
 	private boolean isOver;
+	public static InfoPanel infoPanel;
+	private int currentPlayerIndex;
 
 	Direction direction;
 	
@@ -19,8 +20,6 @@ public class Game {
 	private DealerShuffler dealer;
 	private Stack<ViewCard> cardStack;
 	
-
-	InfoPanel infoPanel = new InfoPanel();
 	
 	public enum Direction
 	{
@@ -29,6 +28,7 @@ public class Game {
 	
 	public Game(){
 		setupGame();
+		infoPanel = new InfoPanel();
 		isOver = false;
 	}
 	
@@ -53,6 +53,8 @@ public class Game {
 	        cardStack = dealer.shuffle();
 	        dealer.spreadCards(players);
 	        players[0].toggleTurn(); 			// Start game with the human player
+	        currentPlayerIndex = 0;
+	        direction = Direction.Clockwise;
 	    }
 	
 	 private int getPlayerCount() {
@@ -122,7 +124,7 @@ public class Game {
 			if (p.isMyTurn()) {
 				ViewCard newCard = getCard();
 				p.obtainCard(newCard);
-				canPlay = canPlay(topCard, newCard);
+				canPlay = p.canPlay(topCard, newCard);
 				break;
 			}
 		}
@@ -130,128 +132,127 @@ public class Game {
 		if (!canPlay)
 			switchTurn();
 	}
-
-	public void switchTurn() {
-		for (Player p : players) {
-			p.toggleTurn();
-		}
-		whoseTurn();
-	}
 	
+	 public void switchTurn() {
+	        players[currentPlayerIndex].toggleTurn();
+
+	        if (direction == Direction.Clockwise) {
+	            currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
+	        } else {
+	            currentPlayerIndex = (currentPlayerIndex - 1 + players.length) % players.length;
+	        }
+
+	        players[currentPlayerIndex].toggleTurn();
+	        whoseTurn();
+	    }
+	 
+	 
+	 public void skipTurn() {
+	        switchTurn();
+	        switchTurn(); // Skip the next player's turn
+	    }
+	 
+	 
+	 public void reverseDirection() {
+	        direction = (direction == Direction.Clockwise) ? Direction.Counter_Clockwise : Direction.Clockwise;
+	        infoPanel.updateDirection(direction.toString());
+	    }
+
+	 public Direction getDirection() {
+		 return direction;
+	 }
+
 	//Draw cards x times
-	public void drawPlus(int times) {
-		for (Player p : players) {
-			if (!p.isMyTurn()) {
-				for (int i = 1; i <= times; i++)
-					p.obtainCard(getCard());
-			}
-		}
-	}
+	 public void drawPlus(int times) {
+		 for (Player p : players) {
+			 if (!p.isMyTurn()) {
+				 for (int i = 1; i <= times; i++)
+					 p.obtainCard(getCard());
+			 	}
+		 	}
+	 	}
 	
-	//response whose turn it is
-	public void whoseTurn() {
+	 //response whose turn it is
+	 public void whoseTurn() {
 
-		for (Player p : players) {
-			if (p.isMyTurn()){
-				infoPanel.updateText(p.getName() + "'s Turn");
-				System.out.println(p.getName() + "'s Turn");
-			}
-		}
-		infoPanel.setDetail(playedCardsSize(), remainingCards());
-		infoPanel.repaint();
-	}
+		 for (Player p : players) {
+			 if (p.isMyTurn()){
+				
+				 infoPanel.updateText(p.getName() + "'s Turn");
+				 System.out.println(p.getName() + "'s Turn");
+				 if(p.getName().contains("CPU")) {
+					 cpu = (CPUPlayer) p;
+				 }
+			 }
+		 }
+		 infoPanel.setDetail(remainingCards());
+		 infoPanel.repaint();
+	 }
 	
-	//return if the game is over
-	public boolean isOver() {
+	 //return if the game is over
+	 public boolean isOver() {
+		 
+		 if(cardStack.isEmpty()){
+			 isOver= true;
+			 return isOver;
+		 }
 		
-		if(cardStack.isEmpty()){
-			isOver= true;
-			return isOver;
-		}
+		 for (Player p : players) {
+			 if (!p.hasCards()) {
+				 isOver = true;
+				 break;
+			 }
+		 }
 		
-		for (Player p : players) {
-			if (!p.hasCards()) {
-				isOver = true;
-				break;
-			}
-		}
-		
-		return isOver;
-	}
+		 return isOver;
+	 }	
 
-	public int remainingCards() {
-		return cardStack.size();
-	}
+	 public int remainingCards() {
+		 return cardStack.size();
+	 }
 
-	public int[] playedCardsSize() {
-		int[] nr = new int[players.length];
-		int i = 0;
-		for (Player p : players) {
-			nr[i] = p.totalPlayedCards();
-			i++;
-		}
-		return nr;
-	}
+	 public int[] playedCardsSize() {
+		 int[] nr = new int[players.length];
+		 int i = 0;
+		 for (Player p : players) {
+			 nr[i] = p.totalPlayedCards();
+			 i++;
+		 }
+		 return nr;
+	 }
 
-	//Check if this card can be played
-	private boolean canPlay(ViewCard topCard, ViewCard newCard) {
 
-		// Color or value matches
-		if (topCard.getColor().equals(newCard.getColor())
-				|| topCard.getCardValue().equals(newCard.getCardValue()))
-			return true;
-		// if chosen wild card color matches
-		else if (topCard instanceof WildCard)
-			return ((WildCard) topCard).getWildColor().equals(newCard.getColor());
-
-		// suppose the new card is a wild card
-		else if (newCard instanceof WildCard)
-			return true;
-
-		// else
-		return false;
-	}
-
-	//Check whether the player said or forgot to say UNO
-	public void checkUNO() {
-		for (Player p : players) {
-			if (p.isMyTurn()) {
-				if (p.getTotalCards() == 1 && !p.getSaidUNO()) {
-					infoPanel.setError(p.getName() + " Forgot to say UNO");
-					p.obtainCard(getCard());
-					p.obtainCard(getCard());
-				}
-			}
-		}		
-	}
-
-	public void setSaidUNO() {
-		for (Player p : players) {
-			if (p.isMyTurn()) {
-				if (p.getTotalCards() == 2) {
-					p.saysUNO();
-					infoPanel.setError(p.getName() + " said UNO");
-				}
-			}
-		}
-	}
+	 public void setSaidUNO() {
+		 for (Player p : players) {
+			 if (p.isMyTurn()) {
+				 if (p.getTotalCards() == 2) {
+					 p.saysUNO();
+					 infoPanel.setError(p.getName() + " said UNO");
+				 }
+			 }
+		 }
+	 }
 	
-	public boolean isPCsTurn(){
-		if(cpu.isMyTurn()){
-			return true;
-		}
-		return false;
-	}
+	 public boolean isPCsTurn(){
+		 if(cpu.isMyTurn()){
+			 return true;
+		 }
+		 return false;
+	 }
 
-	//if it's CPU's turn, play it for CPU
-	public void playPC(ViewCard topCard) {		
+	 //if it's CPU's turn, play it for CPU
+	 public void playPC(ViewCard topCard) {		
 		
-		if (cpu.isMyTurn()) {
-			boolean done = cpu.play(topCard);
-			
-			if(!done)
-				drawCard(topCard);
-		}
-	}
+		 if (cpu.isMyTurn()) {
+			 boolean playable = cpu.play(topCard);
+			 System.out.println(cpu.getName()+"played.");
+			 System.out.println(cpu.getTotalCards()+"left");
+			 if(!playable)
+				 drawCard(topCard);
+		 }
+	 }
+	
+	 
 }
+
 

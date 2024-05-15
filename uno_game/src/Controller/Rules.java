@@ -16,15 +16,10 @@ import gui.ViewCard;
 public class Rules {
 	private Game game;
 	private Session session;
-	private Stack<ViewCard> playedCards;
+	private Stack<ViewCard> discardCards;
 	
 	public static Color[] getUNO_COLORS() {
 		return UNO_COLORS;
-	}
-
-
-	public void setUNO_COLORS(Color[] uNO_COLORS) {
-		UNO_COLORS = uNO_COLORS;
 	}
 
 	public boolean canPlay;
@@ -42,13 +37,13 @@ public class Rules {
 		//mode = requestMode();
 		
 		game = new Game();
-		playedCards = new Stack<ViewCard>();
+		discardCards = new Stack<ViewCard>();
 
 		// First Card
 		ViewCard firstCard = game.getCard();
 		modifyFirstCard(firstCard);
 
-		playedCards.add(firstCard);
+		discardCards.add(firstCard);
 		session = new Session(game, firstCard);
 
 		game.whoseTurn();
@@ -88,7 +83,7 @@ public class Rules {
 			if (isValidMove(clickedCard)) {
 
 				clickedCard.removeMouseListener(CARDLISTENER);
-				playedCards.add(clickedCard);
+				discardCards.add(clickedCard);
 				game.removePlayedCard(clickedCard);
 
 				// function cards ??
@@ -140,44 +135,46 @@ public class Rules {
 		}
 		return false;
 	}
+	
 
 	//check if it is a valid card
-	public boolean isValidMove(ViewCard playedCard) {
-		ViewCard topCard = peekTopCard();
+	  private boolean isValidMove(ViewCard playedCard) {
+	        ViewCard topCard = peekTopCard();
+	        
+	        return playedCard.getColor().equals(topCard.getColor()) ||
+	               playedCard.getCardValue().equals(topCard.getCardValue()) ||
+	               playedCard instanceof WildCard ||
+	               (topCard instanceof WildCard && ((WildCard) topCard).getWildColor().equals(playedCard.getColor()));
+	   
+	  }	
+	
 
-		if (playedCard.getColor().equals(topCard.getColor())
-				|| playedCard.getCardValue().equals(topCard.getCardValue())) {
-			return true;
-		}
-
-		else if (playedCard instanceof WildCard) {
-			return true;
-		} else if (topCard instanceof WildCard) {
-			Color color = ((WildCard) topCard).getWildColor();
-			if (color.equals(playedCard.getColor()))
-				return true;
-		}
-		return false;
-	}
+		
 
 	// ActionCards
 	private void performAction(ViewCard actionCard) {
-
-		// Draw2PLUS
-		if (actionCard.getCardValue().equals("DrawTwo"))
-			game.drawPlus(2);
-		else if (actionCard.getCardValue().equals("Skip"))
-			game.switchTurn();
-		else if (actionCard.getCardValue().equals("Reverse"))
-			game.switchTurn();
-	}
+        switch (actionCard.getCardValue()) {
+            case "DrawTwo":
+                game.drawPlus(2);
+                break;
+            case "Skip":
+                game.switchTurn();
+                break;
+            case "Reverse":
+                game.switchTurn();
+                
+                game.reverseDirection();
+                
+                break;
+        }
+    }
 
 	private void performWild(WildCard functionCard) {		
 
 		//System.out.println(game.whoseTurn());
 		if(game.isPCsTurn()){			
-			int random = new Random().nextInt() % 4;
-			functionCard.useWildColor(UNO_COLORS[Math.abs(random)]);
+			int random = new Random().nextInt(UNO_COLORS.length);
+			functionCard.useWildColor(UNO_COLORS[random]);
 		}
 		else{
 			
@@ -210,7 +207,7 @@ public class Rules {
 	}
 
 	public ViewCard peekTopCard() {
-		return playedCards.peek();
+		return discardCards.peek();
 	}
 
 	public void submitSaidUNO() {

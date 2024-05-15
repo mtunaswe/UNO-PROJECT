@@ -3,14 +3,13 @@ package Controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import Controller.Rules;
 
 public class ButtonListener implements ActionListener{
 	
-	Rules rules;
+	public static Rules rules;
 	
 	public void setServer(Rules rules){
-		this.rules = rules;
+		ButtonListener.rules = rules;
 	}
 	
 	public void drawCard() {
@@ -28,5 +27,7 @@ public class ButtonListener implements ActionListener{
 		// TODO Auto-generated method stub
 		
 	}
+
+	
 
 }
