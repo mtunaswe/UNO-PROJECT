@@ -11,18 +11,24 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
-
 import card_model.WildCard;
 
+/**
+ * The TablePanel class represents the game table panel in the UNO game. It displays the current top card and an information panel.
+ */
 public class TablePanel extends JPanel {
 
     private static final long serialVersionUID = 1L;
     private ViewCard topCard;
     private JPanel table;
     private Image backgroundImage;
+    private InfoPanel infoPanel = new InfoPanel();
 
-    InfoPanel infoPanel = new InfoPanel();
-
+    /**
+     * Constructs a TablePanel with the specified first card.
+     *
+     * @param firstCard The first card to be displayed on the table.
+     */
     public TablePanel(ViewCard firstCard) {
         try {
             backgroundImage = ImageIO.read(new File("C:\\Users\\merta\\git\\UNO-PROJECT\\uno_game\\src\\resources\\table_background.jpg"));
@@ -36,12 +42,16 @@ public class TablePanel extends JPanel {
         topCard = firstCard;
         table = new JPanel();
         table.setBackground(new Color(64, 64, 64));
-         
 
         setTable();
         setComponents();
     }
 
+    /**
+     * Paints the component, including the background image.
+     *
+     * @param g The Graphics object to protect.
+     */
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -51,6 +61,9 @@ public class TablePanel extends JPanel {
         }
     }
 
+    /**
+     * Sets up the table panel with the top card.
+     */
     private void setTable() {
         table.setPreferredSize(new Dimension(500, 200));
         table.setLayout(new GridBagLayout());
@@ -62,6 +75,9 @@ public class TablePanel extends JPanel {
         table.add(topCard, c);
     }
 
+    /**
+     * Sets up the layout and adds components to the TablePanel.
+     */
     private void setComponents() {
         GridBagConstraints c = new GridBagConstraints();
         c.fill = GridBagConstraints.HORIZONTAL;
@@ -79,6 +95,11 @@ public class TablePanel extends JPanel {
         add(infoPanel, c);
     }
 
+    /**
+     * Updates the table with the newly played card.
+     *
+     * @param playedCard The card that has been played.
+     */
     public void setPlayedCard(ViewCard playedCard) {
         table.removeAll();
         topCard = playedCard;
@@ -87,6 +108,11 @@ public class TablePanel extends JPanel {
         setBackgroundColor(playedCard);
     }
 
+    /**
+     * Sets the background color of the table based on the played card.
+     *
+     * @param playedCard The card that has been played.
+     */
     public void setBackgroundColor(ViewCard playedCard) {
         Color background;
         if (playedCard instanceof WildCard)
@@ -96,6 +122,4 @@ public class TablePanel extends JPanel {
 
         table.setBackground(background);
     }
-    
-    
 }

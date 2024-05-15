@@ -1,4 +1,5 @@
 package gui;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -13,6 +14,10 @@ import javax.swing.JPanel;
 import Controller.ButtonListener;
 import game_model.Player;
 
+/**
+ * The PlayerPanel class represents the panel for the human player, 
+ * displaying the player's cards and control buttons (Draw and Say UNO).
+ */
 public class PlayerPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private Player player;
@@ -27,9 +32,13 @@ public class PlayerPanel extends JPanel {
     private JLabel nameLbl;
     private ButtonHandler handler;
     
-    ButtonListener BUTTONLISTENER = new ButtonListener();
+    private ButtonListener BUTTONLISTENER = new ButtonListener();
 
-    // Constructor
+    /**
+     * Constructs a PlayerPanel for the given player.
+     * 
+     * @param newPlayer The player to be displayed in this panel.
+     */
     public PlayerPanel(Player newPlayer) {
         setPlayer(newPlayer);
         setBackground(new Color(216, 191, 168)); // Set background color to match the table
@@ -39,7 +48,7 @@ public class PlayerPanel extends JPanel {
         cardHolder.setPreferredSize(new Dimension(600, 175));
         cardHolder.setBackground(new Color(216, 191, 168)); // Set background color
 
-        // Set
+        // Set cards and control panel
         setCards();
         setControlPanel();
 
@@ -57,6 +66,9 @@ public class PlayerPanel extends JPanel {
         sayUNO.addActionListener(handler);
     }
 
+    /**
+     * Sets the cards for the player.
+     */
     public void setCards() {
         cardHolder.removeAll();
 
@@ -74,19 +86,37 @@ public class PlayerPanel extends JPanel {
         repaint();
     }
 
+    /**
+     * Gets the player associated with this panel.
+     * 
+     * @return The player.
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Sets the player for this panel and updates the player name.
+     * 
+     * @param player The player to be set.
+     */
     public void setPlayer(Player player) {
         this.player = player;
         setPlayerName(player.getName());
     }
 
+    /**
+     * Sets the player's name.
+     * 
+     * @param playername The player's name.
+     */
     public void setPlayerName(String playername) {
         this.name = playername;
     }
 
+    /**
+     * Sets up the control panel with buttons and labels.
+     */
     private void setControlPanel() {
         draw = new JButton("Draw");
         draw.setBackground(new Color(160, 82, 45));
@@ -111,6 +141,13 @@ public class PlayerPanel extends JPanel {
         controlPanel.add(sayUNO);
     }
 
+    /**
+     * Calculates the offset for the cards based on the panel width and total cards.
+     * 
+     * @param width The width of the panel.
+     * @param totalCards The total number of cards.
+     * @return The offset for the cards.
+     */
     private int calculateOffset(int width, int totalCards) {
         int offset = 71;
         if (totalCards <= 7) {
@@ -121,6 +158,13 @@ public class PlayerPanel extends JPanel {
         }
     }
 
+    /**
+     * Gets the starting point for the cards based on the panel width and total cards.
+     * 
+     * @param width The width of the panel.
+     * @param totalCards The total number of cards.
+     * @return The starting point for the cards.
+     */
     private Point getPoint(int width, int totalCards) {
         Point p = new Point(0, 20);
         if (totalCards >= 7) {
@@ -130,7 +174,10 @@ public class PlayerPanel extends JPanel {
             return p;
         }
     }
-    
+
+    /**
+     * Handles button actions for drawing a card and saying UNO.
+     */
     class ButtonHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             if (player.isMyTurn()) {

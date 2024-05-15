@@ -94,7 +94,7 @@ public class MainMenu {
 		btnNewButton_3.setFont(new Font("Cabin", Font.BOLD, 15));
 		btnNewButton_3.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		        LeaderBoard_stats leaderboard = new LeaderBoard_stats();
+		        LeaderBoardWithStats leaderboard = new LeaderBoardWithStats();
 		        leaderboard.setVisible(true);
 		    }
 		});

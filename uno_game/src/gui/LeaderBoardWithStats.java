@@ -1,19 +1,26 @@
 package gui;
 
 import game_model.UserInfo;
-
 import javax.swing.*;
-
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
 
-public class LeaderBoard_stats extends JFrame {
+/**
+ * LeaderBoard_stats is a JFrame that displays the leaderboard of users.
+ * It reads user information from a file, sorts them by their total score,
+ * and displays them in a JList. Users can double-click an entry to see more details.
+ */
+public class LeaderBoardWithStats extends JFrame {
     private static final long serialVersionUID = 1L;
     private JList<UserInfo> list;
 
-    public LeaderBoard_stats() {
+    /**
+     * Constructor for LeaderBoard_stats. Initializes the leaderboard frame.
+     */
+    public LeaderBoardWithStats() {
         setTitle("Leaderboard");
         setSize(400, 300);
         setLocationRelativeTo(null);
@@ -27,17 +34,19 @@ public class LeaderBoard_stats extends JFrame {
                     int index = list.locationToIndex(e.getPoint());
                     if (index >= 0) {
                         UserInfo selectedUser = list.getModel().getElementAt(index);
-                        new UserStatsDialog(LeaderBoard_stats.this, selectedUser).setVisible(true);
+                        new UserStatsDialog(LeaderBoardWithStats.this, selectedUser).setVisible(true);
                     }
                 }
             }
         });
-        
-        
         add(new JScrollPane(list));
         loadLeaderboard();
     }
 
+    /**
+     * Loads the leaderboard data from a file and sorts the users by their total score.
+     * The sorted users are then displayed in the JList.
+     */
     private void loadLeaderboard() {
         File file = new File("src/user.txt");
         ArrayList<UserInfo> users = new ArrayList<>();
@@ -59,7 +68,7 @@ public class LeaderBoard_stats extends JFrame {
             DefaultListModel<UserInfo> model = new DefaultListModel<>();
             int rank = 1;
             for (UserInfo user : users) {
-            	user.setRank(rank);
+                user.setRank(rank);
                 model.addElement(user);
                 rank++;
             }
@@ -68,7 +77,4 @@ public class LeaderBoard_stats extends JFrame {
             e.printStackTrace();
         }
     }
-
-    
 }
-

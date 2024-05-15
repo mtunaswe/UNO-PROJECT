@@ -10,15 +10,24 @@ import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import game_model.Player;
 
+/**
+ * CPUPanel is a custom JPanel that represents a CPU player's hand and status in the game.
+ * It displays the CPU player's cards, name, and the number of cards remaining.
+ */
 public class CPUPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private Player player;
     private Box layout;
     private JLayeredPane cardHolder;
-    private JLabel nameLabel;              //label to display name of CPUs.
-    private JLabel cardCountLabel;         //label to display remaining cards of CPUs.
+    private JLabel nameLabel;              // Label to display name of CPUs.
+    private JLabel cardCountLabel;         // Label to display remaining cards of CPUs.
     private Box controlPanel;
 
+    /**
+     * Constructor for CPUPanel.
+     * 
+     * @param newPlayer the CPU player represented by this panel
+     */
     public CPUPanel(Player newPlayer) {
         this.player = newPlayer;
         setBackground(new Color(216, 191, 168)); // Set background color to match the table
@@ -36,6 +45,10 @@ public class CPUPanel extends JPanel {
         add(layout);
     }
 
+    /**
+     * Sets up the cards in the cardHolder. It creates card components and places them
+     * in the cardHolder with a slight offset to show overlapping.
+     */
     private void setupCards() {
         cardHolder.removeAll();
 
@@ -54,6 +67,9 @@ public class CPUPanel extends JPanel {
         updateCardCountLabel(cardCount);
     }
 
+    /**
+     * Sets up the control panel which contains the player's name and the card count label.
+     */
     private void setupControlPanel() {
         nameLabel = new JLabel(player.getName());
         nameLabel.setForeground(Color.BLACK);
@@ -71,22 +87,40 @@ public class CPUPanel extends JPanel {
         controlPanel.add(cardCountLabel);
     }
 
+    /**
+     * Updates the card count label with the current number of cards.
+     * 
+     * @param count the current number of cards
+     */
     public void updateCardCountLabel(int count) {
          if (cardCountLabel != null) { // Null check to prevent NPE
              cardCountLabel.setText("Cards: " + count);
          }
     }
     
+    /**
+     * Refreshes the panel by re-setting up the cards and updating the UI.
+     */
     public void refreshPanel() {
         setupCards();             // Re-setup cards which also updates card count
         revalidate();
         repaint();
     }
 
+    /**
+     * Gets the player associated with this panel.
+     * 
+     * @return the player
+     */
     public Player getPlayer() {
         return player;
     }
 
+    /**
+     * Sets the player associated with this panel.
+     * 
+     * @param player the player to set
+     */
     public void setPlayer(Player player) {
         this.player = player;
     }

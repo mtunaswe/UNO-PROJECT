@@ -12,12 +12,22 @@ import javax.swing.border.EmptyBorder;
 import game_model.Game;
 import game_model.Player;
 
+/**
+ * The Session class represents the main game session panel, 
+ * handling the layout of player and table panels.
+ */
 public class Session extends JPanel {
     private static final long serialVersionUID = 1L;
     private List<JPanel> playerPanels; // General JPanel to handle both PlayerPanel and CPUPanel
     private TablePanel table;
     private static Game game;
 
+    /**
+     * Constructs a Session panel for the given game and first card.
+     * 
+     * @param newGame The game instance.
+     * @param firstCard The first card to be displayed on the table.
+     */
     public Session(Game newGame, ViewCard firstCard) {
         setPreferredSize(new Dimension(960, 720));
         setBackground(new Color(216, 191, 168)); // Updated to match table's color
@@ -28,7 +38,7 @@ public class Session extends JPanel {
         setPlayers();
         table = new TablePanel(firstCard);
 
-     // Container for CPU panels
+        // Container for CPU panels
         JPanel eastCpuArea = new JPanel();
         JPanel westCpuArea = new JPanel();
         JPanel northCpuArea = new JPanel();
@@ -45,8 +55,6 @@ public class Session extends JPanel {
         eastCpuArea.setBorder(new EmptyBorder(10, 10, 10, 10));
         westCpuArea.setBorder(new EmptyBorder(10, 10, 10, 10));
         northCpuArea.setBorder(new EmptyBorder(10, 10, 10, 10));
-        // Distribute CPU panels
-        distributeCPUPanels(eastCpuArea, westCpuArea, northCpuArea);
 
         setLayout(new BorderLayout());
         add(northCpuArea, BorderLayout.NORTH);
@@ -56,7 +64,13 @@ public class Session extends JPanel {
         add(playerPanels.get(0), BorderLayout.SOUTH); // Human player in the south
     }
 
-
+    /**
+     * Distributes CPU panels to the appropriate areas on the game board.
+     * 
+     * @param east The east area for CPU panels.
+     * @param west The west area for CPU panels.
+     * @param north The north area for CPU panels.
+     */
     private void distributeCPUPanels(JPanel east, JPanel west, JPanel north) {
         int count = 1; // Start from 1 to skip human player
         for (JPanel panel : playerPanels) {
@@ -69,6 +83,9 @@ public class Session extends JPanel {
         }
     }
 
+    /**
+     * Sets the player panels for all players in the game.
+     */
     private void setPlayers() {
         Player[] players = game.getPlayers();
         for (int i = 0; players != null && i < players.length; i++) {
@@ -80,6 +97,9 @@ public class Session extends JPanel {
         }
     }
 
+    /**
+     * Refreshes the player panels.
+     */
     public void refreshPanel() {
         for (JPanel panel : playerPanels) {
             if (panel instanceof PlayerPanel) {
@@ -90,6 +110,11 @@ public class Session extends JPanel {
         revalidate();
     }
 
+    /**
+     * Updates the table with the played card and refreshes the player panels.
+     * 
+     * @param playedCard The card that was played.
+     */
     public void updatePanel(ViewCard playedCard) {
         table.setPlayedCard(playedCard);
         refreshPanel();
