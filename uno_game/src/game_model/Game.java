@@ -5,9 +5,12 @@ import Controller.GameController;
 import Interfaces.Constants;
 import gui.InfoPanel;
 import gui.ViewCard;
-import gui.CPUPanel;
 
-public class Game implements Constants{
+/**
+ * Represents the main game logic and state for the UNO game.
+ * Handles player turns, card drawing, and game rules.
+ */
+public class Game implements Constants {
     private Player[] players;
     private boolean isOver;
     private int currentPlayerIndex;
@@ -18,19 +21,33 @@ public class Game implements Constants{
     private DealerShuffler dealer;
     private Stack<ViewCard> cardStack;
 
+    /**
+     * Enum representing the direction of play.
+     */
     public enum Direction {
         Clockwise, Counter_Clockwise;
     }
 
+    /**
+     * Constructs a new Game and sets up the initial game state.
+     */
     public Game() {
         isOver = false;
         new GameController(this).setupGame();
     }
 
+    /**
+     * Retrieves a card from the dealer.
+     * @return the card drawn from the dealer.
+     */
     public ViewCard getCard() {
         return dealer.getCard();
     }
     
+    /**
+     * Removes a played card from the player's hand and handles UNO penalties.
+     * @param playedCard the card that was played.
+     */
     public void removePlayedCard(ViewCard playedCard) {
         for (Player p : players) {
             if (p.hasCard(playedCard)){
@@ -39,8 +56,7 @@ public class Game implements Constants{
                 if (p.getTotalCards() == 1 && !p.getSaidUNO()) {
                     infoPanel.setError(p.getName() + " Forgot to say UNO");
                     p.obtainCard(getCard());
-                    p.obtainCard(getCard()); //draw two times as a penalty
-                    
+                    p.obtainCard(getCard()); // Draw two cards as a penalty
                 } else if (p.getTotalCards() > 2) {
                     p.setSaidUNOFalse();
                 }
@@ -48,6 +64,10 @@ public class Game implements Constants{
         }
     }
     
+    /**
+     * Draws a card for the current player. If the player cannot play the drawn card, the turn is switched.
+     * @param topCard the top card on the discard pile.
+     */
     public void drawCard(ViewCard topCard) {
         boolean canPlay = false;
 
@@ -64,6 +84,9 @@ public class Game implements Constants{
             switchTurn();
     }
     
+    /**
+     * Switches the turn to the next player based on the direction of play.
+     */
     public void switchTurn() {
         players[currentPlayerIndex].toggleTurn();
 
@@ -77,21 +100,35 @@ public class Game implements Constants{
         whoseTurn();
     }
     
+    /**
+     * Skips the turn of the next player.
+     */
     public void skipTurn() {
         switchTurn();
         switchTurn(); // Skip the next player's turn
     }
     
+    /**
+     * Reverses the direction of play.
+     */
     public void reverseDirection() {
         direction = (direction == Direction.Clockwise) ? Direction.Counter_Clockwise : Direction.Clockwise;
         infoPanel.updateDirection(direction.toString());
         switchTurn();
     }
     
+    /**
+     * Gets the current direction of play.
+     * @return the current direction.
+     */
     public Direction getDirection() {
         return direction;
     }
 
+    /**
+     * Draws a specified number of cards for the next player.
+     * @param times the number of cards to draw.
+     */
     public void drawPlus(int times) {
         Player nextPlayer = getNextPlayer();
         
@@ -100,6 +137,10 @@ public class Game implements Constants{
         }
     }
     
+    /**
+     * Helper method to get the next player in turn based on the direction of play.
+     * @return the next player.
+     */
     private Player getNextPlayer() {
         int nextPlayerIndex;
         if (direction == Direction.Clockwise) {
@@ -110,6 +151,9 @@ public class Game implements Constants{
         return players[nextPlayerIndex];
     }
 
+    /**
+     * Updates the InfoPanel to show whose turn it is.
+     */
     public void whoseTurn() {
         for (Player p : players) {
             if (p.isMyTurn()) {
@@ -124,6 +168,10 @@ public class Game implements Constants{
         infoPanel.repaint();
     }
 
+    /**
+     * Checks if the game is over.
+     * @return true if the game is over, false otherwise.
+     */
     public boolean isOver() {
         if (cardStack.isEmpty()) {
             isOver = true;
@@ -140,10 +188,18 @@ public class Game implements Constants{
         return isOver;
     }
 
+    /**
+     * Gets the number of remaining cards in the deck.
+     * @return the number of remaining cards.
+     */
     public int remainingCards() {
         return cardStack.size();
     }
 
+    /**
+     * Gets the number of cards played by each player.
+     * @return an array with the number of cards played by each player.
+     */
     public int[] playedCardsSize() {
         int[] nr = new int[players.length];
         int i = 0;
@@ -154,6 +210,9 @@ public class Game implements Constants{
         return nr;
     }
 
+    /**
+     * Sets the "UNO" status for the player who has said UNO.
+     */
     public void setSaidUNO() {
         for (Player p : players) {
             if (p.isMyTurn()) {
@@ -165,10 +224,19 @@ public class Game implements Constants{
         }
     }
     
+    /**
+     * Checks if it is the CPU's turn to play.
+     * @return true if it is the CPU's turn, false otherwise.
+     */
     public boolean isPCsTurn() {
         return cpu.isMyTurn();
     }
 
+    /**
+     * Plays a card for the CPU.
+     * @param topCard the top card on the discard pile.
+     * @return the card played by the CPU, or null if no card was played.
+     */
     public ViewCard playPC(ViewCard topCard) {
         if (cpu.isMyTurn()) {
             boolean playable = cpu.play(topCard);
@@ -184,6 +252,7 @@ public class Game implements Constants{
     }
 
     // Getters and Setters for private fields
+    
     public Player[] getPlayers() {
         return players;
     }
