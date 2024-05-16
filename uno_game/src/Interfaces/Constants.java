@@ -8,7 +8,7 @@ import gui.InfoPanel;
 
 public interface Constants {
 	int TOTAL_CARDS = 108;
-	int FIRSTHAND = 8;
+	int FIRSTHAND = 7;
 
 	
 	Color RED = new Color(216, 46, 63);

@@ -2,14 +2,14 @@ package game_model;
 
 import java.util.Stack;
 import Controller.GameController;
+import Interfaces.Constants;
 import gui.InfoPanel;
 import gui.ViewCard;
 import gui.CPUPanel;
 
-public class Game {
+public class Game implements Constants{
     private Player[] players;
     private boolean isOver;
-    public static InfoPanel infoPanel;
     private int currentPlayerIndex;
 
     Direction direction;
@@ -23,7 +23,6 @@ public class Game {
     }
 
     public Game() {
-        infoPanel = new InfoPanel();
         isOver = false;
         new GameController(this).setupGame();
     }
