@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
 import game_model.Game;
 import game_model.Player;
 
@@ -90,6 +91,9 @@ public class Session extends JPanel {
             if (panel instanceof PlayerPanel) {
                 ((PlayerPanel) panel).setCards();
             }
+            else if (panel instanceof CPUPanel) {
+                ((CPUPanel) panel).setupCards();
+            }
         }
         table.revalidate();
         revalidate();
@@ -105,3 +109,5 @@ public class Session extends JPanel {
         super.paintComponent(g);
     }
 }
+
+

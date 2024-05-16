@@ -1,9 +1,11 @@
 package game_model;
 
 import java.util.Stack;
+
 import Controller.GameController;
+
 import Interfaces.Constants;
-import gui.InfoPanel;
+
 import gui.ViewCard;
 
 /**
@@ -285,7 +287,4 @@ public class Game implements Constants {
         this.direction = direction;
     }
 
-    public InfoPanel getInfoPanel() {
-        return infoPanel;
-    }
 }

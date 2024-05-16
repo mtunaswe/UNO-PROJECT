@@ -6,15 +6,16 @@ import javax.swing.JFrame;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import game_model.UserInfo;
-import game_model.UserSession;
-
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Color;
+
+import game_model.UserInfo;
+import game_model.UserSession;
+
+
 
 public class MainMenu {
 

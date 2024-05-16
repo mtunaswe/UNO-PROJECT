@@ -3,7 +3,9 @@ package game_model;
 import java.awt.event.MouseEvent;
 import java.util.Random;
 import javax.swing.SwingUtilities;
+
 import card_model.WildCard;
+
 import gui.ViewCard;
 
 /**

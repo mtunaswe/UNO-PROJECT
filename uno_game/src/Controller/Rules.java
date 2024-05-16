@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.Stack;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 
 import Interfaces.Constants;
+
 import card_model.WildCard;
-import game_model.CPUPlayer;
+
 import game_model.Game;
 import game_model.Player;
-import gui.CPUPanel;
+
 import gui.Session;
 import gui.ViewCard;
 
@@ -110,48 +110,13 @@ public class Rules implements Constants {
             if (game.isPCsTurn()) {
                 ViewCard playedCard = game.playPC(peekTopCard());
                 if (playedCard != null) {
-                    removePlayedCardFromCPUPanel(playedCard);
+                    game.removePlayedCard(playedCard);
+                    session.updatePanel(clickedCard);
                 }
             }
         }
     }
 
-    /**
-     * Removes the played card from the CPU panel.
-     *
-     * @param playedCard the card played by the CPU
-     */
-    private void removePlayedCardFromCPUPanel(ViewCard playedCard) {
-        for (Player player : game.getPlayers()) {
-            if (player instanceof CPUPlayer) {
-                player.removeCard(playedCard);
-                CPUPanel cpuPanel = findCPUPanel(player);
-                if (cpuPanel != null) {
-                    cpuPanel.setupCards();
-                }
-                break;
-            }
-        }
-        session.refreshPanel();
-    }
-
-    /**
-     * Finds the CPUPanel for a given CPU player.
-     *
-     * @param cpuPlayer the CPU player
-     * @return the CPUPanel for the given CPU player
-     */
-    private CPUPanel findCPUPanel(Player cpuPlayer) {
-        for (JPanel panel : session.getPlayerPanels()) {
-            if (panel instanceof CPUPanel) {
-                CPUPanel cpuPanel = (CPUPanel) panel;
-                if (cpuPanel.getPlayer().equals(cpuPlayer)) {
-                    return cpuPanel;
-                }
-            }
-        }
-        return null;
-    }
 
     /**
      * Checks if the game is over and updates the game state accordingly.
@@ -249,7 +214,7 @@ public class Rules implements Constants {
             if (game.isPCsTurn()) {
                 ViewCard playedCard = game.playPC(peekTopCard());
                 if (playedCard != null) {
-                    removePlayedCardFromCPUPanel(playedCard);
+                	game.removePlayedCard(playedCard);
                 }
             }
         }
