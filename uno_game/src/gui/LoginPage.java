@@ -101,6 +101,7 @@ public class LoginPage extends JFrame {
                         String line;
                         while ((line = reader.readLine()) != null) {
                             String[] details = line.split(", ");
+                            System.out.println(details);
                             if (details[0].equals(username)) {
                                 int wins = Integer.parseInt(details[2]);
                                 int losses = Integer.parseInt(details[3]);

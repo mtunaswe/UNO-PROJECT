@@ -15,7 +15,7 @@ public class CPUPlayer extends Player {
     
     private Random random = new Random();  // Random object for probability checks
     private static final double UNO_PROBABILITY = 0.8;  // 80% chance for CPU to remember to say Uno
-    private static final int DELAY_MS = 500;  // Delay in milliseconds for simulating mouse events
+    private static final int DELAY_MS = 300;  // Delay in milliseconds for simulating mouse events
 
     /**
      * Constructs a CPUPlayer with the specified name.

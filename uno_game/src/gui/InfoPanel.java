@@ -60,6 +60,7 @@ public class InfoPanel extends JPanel {
             g.setFont(adjustedFont);
             g.setColor(Color.red);
             g.drawString(error, xPos, 35);
+            
             error = ""; // Clear the error after displaying
         }
     }

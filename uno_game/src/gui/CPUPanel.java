@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Point;
+import java.util.List;
 import javax.swing.Box;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
@@ -49,7 +50,7 @@ public class CPUPanel extends JPanel {
      * Sets up the cards in the cardHolder. It creates card components and places them
      * in the cardHolder with a slight offset to show overlapping.
      */
-    private void setupCards() {
+    public void setupCards() {
         cardHolder.removeAll();
 
         Point origin = new Point(10, 20);         
@@ -123,5 +124,16 @@ public class CPUPanel extends JPanel {
      */
     public void setPlayer(Player player) {
         this.player = player;
+    }
+
+    /**
+     * Removes the played card from the CPU's hand and updates the display.
+     * 
+     * @param playedCard the card that was played
+     */
+    public void removePlayedCard(ViewCard playedCard) {
+        List<ViewCard> cards = player.getAllCards();
+        cards.remove(playedCard);
+        refreshPanel();
     }
 }

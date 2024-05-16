@@ -65,7 +65,7 @@ public class TablePanel extends JPanel {
      * Sets up the table panel with the top card.
      */
     private void setTable() {
-        table.setPreferredSize(new Dimension(500, 200));
+        table.setPreferredSize(new Dimension(400, 200));
         table.setLayout(new GridBagLayout());
 
         GridBagConstraints c = new GridBagConstraints();

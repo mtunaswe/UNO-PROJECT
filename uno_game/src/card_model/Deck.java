@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.util.LinkedList;
 
 import Controller.CardListener;
-import Controller.Rules;
+import Interfaces.Constants;
 import gui.ViewCard;
 
 /**
@@ -12,21 +12,7 @@ import gui.ViewCard;
  * It initializes the deck with UNO cards, adds listeners to the cards,
  * and provides methods to access the deck.
  */
-public class Deck {
-
-    private final Color[] UNO_COLORS = Rules.getUNO_COLORS();
-    private final int[] UNO_NUMBERS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-   
-    // ActionCard Functions
-    String REVERSE = "Reverse";
-    String SKIP = "Skip";
-    String DRAW2 = "2+";
-
-    // Wild card functions
-    String W_NORMAL = "W";
-    String W_DRAW4 = "4+";
-
-    String[] ActionTypes = {REVERSE, SKIP, DRAW2};
+public class Deck implements Constants{
 
     private LinkedList<ViewCard> UNOcards;
 
