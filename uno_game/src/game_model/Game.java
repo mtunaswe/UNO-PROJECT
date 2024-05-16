@@ -169,6 +169,21 @@ public class Game implements Constants {
         infoPanel.setDetail(remainingCards());
         infoPanel.repaint();
     }
+    
+    /**
+     * Calculates the total score of cards left in all CPUs' hands.
+     * @return the total score of cards in CPUs' hands.
+     */
+    public int calculateTotalCpuScore() {
+        int totalScore = 0;
+        for (Player player : players) {
+            if (player instanceof CPUPlayer) {
+                totalScore += player.calculateTotalScore();
+            }
+        }
+        return totalScore;
+    }
+
 
     /**
      * Checks if the game is over.

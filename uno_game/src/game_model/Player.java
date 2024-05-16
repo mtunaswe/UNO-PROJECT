@@ -1,6 +1,8 @@
 package game_model;
 
 import java.util.LinkedList;
+
+import card_model.Card;
 import card_model.WildCard;
 import gui.ViewCard;
 
@@ -120,6 +122,20 @@ public class Player {
         // Otherwise
         return false;
     }
+    
+    /**
+     * Calculates the total score of cards left in the player's hand.
+     * @return the total score of the cards in the player's hand.
+     */
+    public int calculateTotalScore() {
+        int totalScore = 0;
+        for (ViewCard card : cards) {
+            if (card instanceof Card) {
+                totalScore += ((Card) card).getScore();
+            }
+        }
+        return totalScore;
+    }
 
     /**
      * Gets the total number of cards played by the player.
@@ -184,4 +200,6 @@ public class Player {
     public void setCards() {
         cards = new LinkedList<ViewCard>();
     }
+    
+    
 }

@@ -6,9 +6,9 @@ import java.util.Stack;
 import javax.swing.JOptionPane;
 
 import Interfaces.Constants;
-
+import card_model.Card;
 import card_model.WildCard;
-
+import game_model.CPUPlayer;
 import game_model.Game;
 import game_model.Player;
 
@@ -119,15 +119,24 @@ public class Rules implements Constants {
 
 
     /**
-     * Checks if the game is over and updates the game state accordingly.
+     * Checks if the game is over and sums the scores of the remaining cards in CPUs' decks.
      */
     private void checkResults() {
         if (game.isOver()) {
             canPlay = false;
             infoPanel.updateText("GAME OVER");
+            
+            for (Player player : game.getPlayers()) {
+                if (!player.hasCards() && !(player instanceof CPUPlayer)) {
+                    int totalCpuScore = game.calculateTotalCpuScore();
+                    System.out.println("Total CPU Score: " + totalCpuScore);
+                    infoPanel.updateText(player.getName() + " wins! CPU Total Score: " + totalCpuScore);
+                    break;
+                }
+            }
+            
         }
     }
-    
     /**
      * Checks if it's the current player's turn to play the clicked card.
      *
