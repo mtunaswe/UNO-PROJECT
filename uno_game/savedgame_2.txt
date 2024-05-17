@@ -1,0 +1,6 @@
+n
+CPU 1
+CurrentPlayerIndex:0
+Direction:Clockwise
+UserHand:java.awt.Color[r=255,g=225,b=53] 9;java.awt.Color[r=216,g=46,b=63] 5;java.awt.Color[r=255,g=225,b=53] 9;java.awt.Color[r=216,g=46,b=63] 2;java.awt.Color[r=216,g=46,b=63] 5;java.awt.Color[r=216,g=46,b=63] 6;
+CPUHandSize:CPU 1:6
