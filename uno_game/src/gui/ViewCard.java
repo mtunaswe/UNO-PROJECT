@@ -54,7 +54,8 @@ public class ViewCard extends JPanel implements Constants{
     public static int NUMBERS = 1;
     public static int ACTION = 2;
     public static int WILD = 3;
-    private static final Map<Color, String> colorMap = new HashMap<>();
+    
+    protected static final Map<Color, String> colorMap = new HashMap<>();
 
     static {
         colorMap.put(RED, "Red");
@@ -196,7 +197,7 @@ public class ViewCard extends JPanel implements Constants{
      * 
      * @param g The Graphics object for rendering.
      */
-    private void displayBack(Graphics g) {
+    void displayBack(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
         if (backImage != null) {
             g2.drawImage(backImage, 0, 0, getWidth(), getHeight(), this);

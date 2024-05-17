@@ -1,6 +1,8 @@
 package Interfaces;
 
 import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
 
 import Controller.ButtonListener;
 import Controller.CardListener;
@@ -18,7 +20,10 @@ public interface Constants {
 	
 	Color[] UNO_COLORS = {RED, BLUE, GREEN, YELLOW};
 	int[] UNO_NUMBERS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
-	 
+	
+	static final Map<Color, String> colorMap = new HashMap<>();
+
+    
 	 
 	// ActionCard Functions
 	String REVERSE = "Reverse";

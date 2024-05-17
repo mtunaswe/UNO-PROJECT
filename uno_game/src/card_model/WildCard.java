@@ -82,4 +82,8 @@ public class WildCard extends Card {
     public String toString() {
         return "Wild " + value;
     }
+    
+    public String getWildColorName() {
+        return colorMap.getOrDefault(colorSelected,"Unknown Color");
+    }
 }

@@ -143,7 +143,7 @@ public class Rules implements Constants {
     private void logFunctionPlayEvent(ViewCard playedCard, String currentPlayerName) {
         String functionDetails = playedCard.getColorName() + " " + playedCard.getCardValue();
         if (playedCard instanceof WildCard) {
-            functionDetails += " and chose " + ((WildCard) playedCard).getWildColor() + " color";
+            functionDetails += " and chose " + ((WildCard) playedCard).getWildColorName() + " color";
         }
         String event =  currentPlayerName + " played " + functionDetails;
         session.logEvent(event);
@@ -167,7 +167,7 @@ public class Rules implements Constants {
             for (Player player : game.getPlayers()) {
                 if (!player.hasCards()) {
                     infoPanel.updateText(player.getName() + " wins!");
-                    
+                    logWon(player);
                  
                     UserInfo currentUser = UserSession.getCurrentUser();
                     int wins = currentUser.getWins();
@@ -189,6 +189,7 @@ public class Rules implements Constants {
                                 //System.out.println("Total CPU Score: " + totalCpuScore);
                                 infoPanel.updateScore(totalCpuScore);
                                 infoPanel.repaint();
+                                logScore(player, totalScore);
                             } else {
                                 losses++;
                             }
@@ -211,6 +212,20 @@ public class Rules implements Constants {
             }
         }
     }
+	
+	private void logScore(Player player, int totalScore) {
+		String CPUscore = "Total Score of "+ player.getName() + "is" + totalScore;
+	
+	    session.logEvent(CPUscore);
+	        
+	}
+	
+	private void logWon(Player player) {
+		String event = player.getName() + " won the UNO game!!! ";
+		
+		session.logEvent(event);
+		
+	}
     
     
     

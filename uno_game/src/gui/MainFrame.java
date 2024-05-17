@@ -25,7 +25,8 @@ public class MainFrame extends JFrame implements Constants{
      * Constructs the MainFrame and sets up the game session.
      */
     public MainFrame() { 
-    	setBounds(0, 0, 1920, 1080);
+    	
+    	setBounds(0, 0, 1800, 900);
         server = new Rules();
         CARDLISTENER.setServer(server);
         BUTTONLISTENER.setServer(server);
