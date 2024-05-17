@@ -1,5 +1,6 @@
 package Controller;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -7,6 +8,7 @@ import java.util.Stack;
 import javax.swing.JOptionPane;
 
 import Interfaces.Constants;
+import card_model.NumberCard;
 import card_model.WildCard;
 import game_model.CPUPlayer;
 import game_model.Game;
@@ -76,6 +78,7 @@ public class Rules implements Constants {
      * @param clickedCard the card to be played
      */
     public void playThisCard(ViewCard clickedCard) {
+    	String currentPlayerName = game.getCurrentPlayer().getName(); // Capture the current player's name
         // Check player's turn
         if (!isHisTurn(clickedCard)) {
             infoPanel.setError("It's not your turn");
@@ -86,7 +89,7 @@ public class Rules implements Constants {
                 clickedCard.removeMouseListener(CARDLISTENER);
                 discardCards.add(clickedCard);
                 game.removePlayedCard(clickedCard);
-
+                
                 // function cards
                 switch (clickedCard.getClass().getSimpleName()) {
                     case "ActionCard":
@@ -101,24 +104,50 @@ public class Rules implements Constants {
 
                 game.switchTurn();
                 session.updatePanel(clickedCard);
+                
+                if(clickedCard instanceof NumberCard) {
+                	  logNumberPlayEvent(clickedCard, currentPlayerName);
+                	
+                }else {
+                	logFunctionPlayEvent(clickedCard, currentPlayerName);
+                }
+             
                 checkResults();
             } else {
                 infoPanel.setError("Invalid move");
                 infoPanel.repaint();
             }
         }
-
+        
+        
         if (canPlay) {
             if (game.isPCsTurn()) {
                 ViewCard playedCard = game.playPC(peekTopCard());
                 if (playedCard != null) {
                     game.removePlayedCard(playedCard);
                     session.updatePanel(clickedCard);
+                    
                 }
             }
         }
     }
+    
 
+    private void logNumberPlayEvent(ViewCard playedCard, String currentPlayerName) {
+        String cardDetails = playedCard.getColorName() + " " + playedCard.getCardValue();
+        String event = currentPlayerName + " played " + cardDetails;
+        session.logEvent(event);
+    }
+
+    
+    private void logFunctionPlayEvent(ViewCard playedCard, String currentPlayerName) {
+        String functionDetails = playedCard.getColorName() + " " + playedCard.getCardValue();
+        if (playedCard instanceof WildCard) {
+            functionDetails += " and chose " + ((WildCard) playedCard).getWildColor() + " color";
+        }
+        String event =  currentPlayerName + " played " + functionDetails;
+        session.logEvent(event);
+    }
 
     /**
      * Checks if the game is over and sums the scores of the remaining cards in CPUs' decks.
@@ -133,15 +162,13 @@ public class Rules implements Constants {
 
             // Read user data and add them all to users List. 
             List<String[]> users = UserFileHandler.readUserFile();
-            
-            System.out.println(users);
+                   
 
             for (Player player : game.getPlayers()) {
                 if (!player.hasCards()) {
                     infoPanel.updateText(player.getName() + " wins!");
                     
-                    System.out.println(UserSession.getCurrentUser());
-                    
+                 
                     UserInfo currentUser = UserSession.getCurrentUser();
                     int wins = currentUser.getWins();
                     int losses = currentUser.getLosses();
@@ -159,7 +186,7 @@ public class Rules implements Constants {
                                 int totalCpuScore = game.calculateTotalCpuScore();
                                 totalScore += totalCpuScore;
                                 wins++;
-                                System.out.println("Total CPU Score: " + totalCpuScore);
+                                //System.out.println("Total CPU Score: " + totalCpuScore);
                                 infoPanel.updateScore(totalCpuScore);
                                 infoPanel.repaint();
                             } else {
@@ -242,9 +269,11 @@ public class Rules implements Constants {
      * @param functionCard the wild card to be played
      */
     private void performWild(WildCard functionCard) {
+    	Color chosenColor;
         if (game.isPCsTurn()) {
-            int random = new Random().nextInt(UNO_COLORS.length);
-            functionCard.useWildColor(UNO_COLORS[random]);
+        	chosenColor = getMostCommonColor((CPUPlayer) game.getCurrentPlayer());
+           
+            functionCard.useWildColor(chosenColor);    
         } else {
             ArrayList<String> colors = new ArrayList<>();
             colors.add("RED");
@@ -252,17 +281,43 @@ public class Rules implements Constants {
             colors.add("GREEN");
             colors.add("YELLOW");
 
-            String chosenColor = (String) JOptionPane.showInputDialog(null,
+            String selectedColor = (String) JOptionPane.showInputDialog(null,
                     "Choose a color", "Wild Card Color",
                     JOptionPane.DEFAULT_OPTION, null, colors.toArray(), null);
 
-            functionCard.useWildColor(UNO_COLORS[colors.indexOf(chosenColor)]);
+            functionCard.useWildColor(UNO_COLORS[colors.indexOf(selectedColor)]);
         }
 
         if (functionCard.getCardValue().equals("4+")) {
             game.drawPlus(4);
+          
         }
+        
+        
     }
+    
+    private Color getMostCommonColor(CPUPlayer cpu) {
+        int[] colorCounts = new int[UNO_COLORS.length];
+        
+        for (ViewCard card : cpu.getAllCards()) {
+            Color cardColor = card.getColor();
+            for (int i = 0; i < UNO_COLORS.length; i++) {
+                if (cardColor.equals(UNO_COLORS[i])) {
+                    colorCounts[i]++;
+                }
+            }
+        }
+
+        int maxCountIndex = 0;
+        for (int i = 1; i < colorCounts.length; i++) {
+            if (colorCounts[i] > colorCounts[maxCountIndex]) {
+                maxCountIndex = i;
+            }
+        }
+
+        return UNO_COLORS[maxCountIndex];
+    }
+
 
     /**
      * Requests a card to be drawn from the deck.

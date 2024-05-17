@@ -193,6 +193,14 @@ public class Game implements Constants {
         }
         return totalScore;
     }
+    
+    /**
+     * Gets the current player.
+     * @return the current player.
+     */
+    public Player getCurrentPlayer() {
+        return players[currentPlayerIndex];
+    }
 
 
     /**

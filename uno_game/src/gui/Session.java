@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
 import game_model.Game;
@@ -18,6 +20,8 @@ public class Session extends JPanel {
     private List<JPanel> playerPanels; // General JPanel to handle both PlayerPanel and CPUPanel
     private TablePanel table;
     private static Game game;
+    private JTextArea eventLog;
+    
 
     public Session(Game newGame, ViewCard firstCard) {
         setPreferredSize(new Dimension(960, 720));
@@ -48,13 +52,27 @@ public class Session extends JPanel {
         northCpuArea.setBorder(new EmptyBorder(10, 10, 10, 10));
         // Distribute CPU panels
         distributeCPUPanels(eastCpuArea, westCpuArea, northCpuArea);
+        
+        eventLog = new JTextArea(5, 30);
+        eventLog.setEditable(false);
+        JScrollPane scrollPane = new JScrollPane(eventLog);
+        scrollPane.setPreferredSize(new Dimension(200, 100));
+
+        // Panel to hold player panel and event log
+        JPanel southPanel = new JPanel(new BorderLayout());
+        southPanel.add(playerPanels.get(0), BorderLayout.CENTER);
+        southPanel.add(scrollPane, BorderLayout.WEST);
+        
+        eventLog.append("Welcome to UNO Game\n");
+        
 
         setLayout(new BorderLayout());
         add(northCpuArea, BorderLayout.NORTH);
         add(westCpuArea, BorderLayout.WEST);
         add(table, BorderLayout.CENTER);
-        add(eastCpuArea, BorderLayout.EAST);
-        add(playerPanels.get(0), BorderLayout.SOUTH); // Human player in the south
+        add(eastCpuArea, BorderLayout.EAST); 
+        add(southPanel, BorderLayout.SOUTH);
+       
     }
 
     private void distributeCPUPanels(JPanel east, JPanel west, JPanel north) {
@@ -111,6 +129,16 @@ public class Session extends JPanel {
     public void updatePanel(ViewCard playedCard) {
         table.setPlayedCard(playedCard);
         refreshPanel();
+        
+    }
+    
+    /**
+     * Logs an event message to the event log.
+     * 
+     * @param message the event message to log
+     */
+    public void logEvent(String message) {
+        eventLog.append(message + "\n");
     }
 
     @Override

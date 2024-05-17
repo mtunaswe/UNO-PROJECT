@@ -4,4 +4,4 @@ baldeniz, denom_12345, 2, 4, 404, 6
 onur, apcag!123, 2, 5, 302, 7
 baho, bahadır_swinger33, 1, 4, 270, 5
 mengu, penguin_2002, 3, 6, 508, 9
-tahaekim, taha_ekim123456, 1, 1, 46, 2
+tahaekim, taha_ekim123456, 2, 1, 137, 3

@@ -11,17 +11,22 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.imageio.ImageIO;
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.border.Border;
+
+import Interfaces.Constants;
 
 /**
  * The ViewCard class represents a visual component for displaying a card in a card game.
  * It extends JPanel and includes functionality to display the front and back of the card,
  * with various card details such as color, type, and value.
  */
-public class ViewCard extends JPanel {
+public class ViewCard extends JPanel implements Constants{
 
     private static final long serialVersionUID = 1L;
 
@@ -35,9 +40,7 @@ public class ViewCard extends JPanel {
 
     private int WIDTH = 50;
     private int HEIGHT = 75;
-    Dimension SMALL = new Dimension(WIDTH, HEIGHT);
     Dimension MEDIUM = new Dimension(WIDTH * 2, HEIGHT * 2);
-    Dimension BIG = new Dimension(WIDTH * 3, HEIGHT * 3);
 
     Dimension CARDSIZE = MEDIUM;
 
@@ -51,6 +54,15 @@ public class ViewCard extends JPanel {
     public static int NUMBERS = 1;
     public static int ACTION = 2;
     public static int WILD = 3;
+    private static final Map<Color, String> colorMap = new HashMap<>();
+
+    static {
+        colorMap.put(RED, "Red");
+        colorMap.put(BLUE, "Blue");
+        colorMap.put(GREEN, "Green");
+        colorMap.put(YELLOW, "Yellow");
+    }
+
 
     /**
      * Constructor for creating a ViewCard for CPUPanel.
@@ -290,5 +302,14 @@ public class ViewCard extends JPanel {
      */
     public int getType() {
         return type;
+    }
+    
+    /**
+     * Gets the name of the card's color.
+     * 
+     * @return The name of the card's color.
+     */
+    public String getColorName() {
+        return colorMap.getOrDefault(cardColor, "Wild Card");
     }
 }
