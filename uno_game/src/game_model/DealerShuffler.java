@@ -3,6 +3,8 @@ package game_model;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Stack;
+
+import Interfaces.Constants;
 import card_model.Deck;
 import gui.ViewCard;
 
@@ -10,7 +12,7 @@ import gui.ViewCard;
  * The DealerShuffler class is responsible for managing the deck of cards,
  * shuffling them, and distributing them to players.
  */
-public class DealerShuffler {
+public class DealerShuffler implements Constants{
     
     private Deck cardDeck;
     private Stack<ViewCard> cardStack;
@@ -42,7 +44,7 @@ public class DealerShuffler {
      * @param players an array of Player objects to receive cards
      */
     public void spreadCards(Player[] players) {
-        for (int i = 1; i <= 7; i++) {
+        for (int i = 1; i <= FIRSTHAND; i++) {
             for (Player p : players) {
                 p.obtainCard(cardStack.pop());
             }
