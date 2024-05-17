@@ -18,6 +18,8 @@ public class InfoPanel extends JPanel {
     private String directionText;
     private int panelCenter;
     private int rest = 0;
+	private int score;
+
 
     /**
      * Constructor for InfoPanel. Initializes the panel with default settings.
@@ -27,9 +29,11 @@ public class InfoPanel extends JPanel {
         setOpaque(false);
         error = "";
         text = "Game Started";
-        directionText = "Direction: Clockwise";
-
+        directionText = "Clockwise";
+        
         updateText(text);
+        updateDirection(directionText);
+
     }
 
     /**
@@ -42,12 +46,16 @@ public class InfoPanel extends JPanel {
         panelCenter = getWidth() / 2;
 
         printMessage(g);
+        printCPUScore(g);
         printError(g);
-        printDetail(g);
+        printRemaining(g);
         printDirection(g);
+        
     }
 
-    /**
+    
+
+	/**
      * Prints an error message in red at the top of the panel.
      * 
      * @param g the Graphics object used for painting
@@ -61,7 +69,7 @@ public class InfoPanel extends JPanel {
             g.setColor(Color.red);
             g.drawString(error, xPos, 35);
             
-            error = ""; // Clear the error after displaying
+            error = ""; 
         }
     }
 
@@ -78,20 +86,46 @@ public class InfoPanel extends JPanel {
         g.setColor(new Color(0, 0, 0));
         g.drawString(text, xPos, 75);
     }
+    
+    /**
+     * Prints the CPU score below the main message text.
+     * 
+     * @param g the Graphics object used for painting
+     */
+    private void printCPUScore(Graphics g) {
+        Font adjustedFont = new Font("Cabin", Font.BOLD, 25);
+        FontMetrics fm = this.getFontMetrics(adjustedFont);
+        g.setColor(new Color(127, 127, 127));
+
+        String cpuScoreText = "CPU Total Score: " + score;
+        int xPos = panelCenter - fm.stringWidth(cpuScoreText) / 2;
+
+        g.setFont(adjustedFont);
+        g.drawString(cpuScoreText, xPos, 105); 
+    }
 
     /**
      * Prints the detail about the remaining cards at the bottom of the panel.
      * 
      * @param g the Graphics object used for painting
      */
-    private void printDetail(Graphics g) {
-        Font adjustedFont = new Font("Cabin", Font.BOLD, 25);
-        FontMetrics fm = this.getFontMetrics(adjustedFont);
-        g.setColor(new Color(0, 0, 0));
-        String detailText = "Remaining Cards: " + rest;
-        int xPos = panelCenter - fm.stringWidth(detailText) / 2;
-        g.drawString(detailText, xPos, 180);
-    }
+    private void printRemaining(Graphics g) {
+    	Font adjustedFont = new Font("Calibri", Font.BOLD,	25);	
+		FontMetrics fm = this.getFontMetrics(adjustedFont);
+		g.setColor(new Color(127,127,127));
+		
+		//Determine the width of the word to position
+	
+		int xPos = panelCenter - fm.stringWidth(text) / 2;
+		
+		g.setFont(adjustedFont);
+		
+		text = "Remaining: " + rest;
+		xPos = panelCenter - fm.stringWidth(text) / 2;
+		g.drawString(text, xPos, 180);
+		
+		
+	}
 
     /**
      * Prints the current direction of play in the middle of the panel.
@@ -113,7 +147,7 @@ public class InfoPanel extends JPanel {
      */
     public void updateText(String newText) {
         text = newText;
-        repaint();
+      
     }
 
     /**
@@ -123,7 +157,7 @@ public class InfoPanel extends JPanel {
      */
     public void updateDirection(String newDirection) {
         directionText = "Direction: " + newDirection;
-        repaint();
+       
     }
 
     /**
@@ -133,7 +167,7 @@ public class InfoPanel extends JPanel {
      */
     public void setError(String errorMgs) {
         error = errorMgs;
-        repaint();
+        
     }
 
     /**
@@ -141,8 +175,16 @@ public class InfoPanel extends JPanel {
      * 
      * @param remaining the number of remaining cards
      */
-    public void setDetail(int remaining) {
+    public void setRemaining(int remaining) {
+    	
         rest = remaining;
-        repaint();
+        
     }
+
+	public void updateScore(int CPUscore) {
+		
+		score = CPUscore;
+		
+		
+	}
 }

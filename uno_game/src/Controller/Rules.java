@@ -1,17 +1,19 @@
 package Controller;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 import javax.swing.JOptionPane;
 
 import Interfaces.Constants;
-import card_model.Card;
 import card_model.WildCard;
 import game_model.CPUPlayer;
 import game_model.Game;
 import game_model.Player;
-
+import game_model.UserFileHandler;
+import game_model.UserInfo;
+import game_model.UserSession;
 import gui.Session;
 import gui.ViewCard;
 
@@ -121,22 +123,71 @@ public class Rules implements Constants {
     /**
      * Checks if the game is over and sums the scores of the remaining cards in CPUs' decks.
      */
-    private void checkResults() {
+    
+   
+	private void checkResults() {
         if (game.isOver()) {
             canPlay = false;
             infoPanel.updateText("GAME OVER");
+            infoPanel.repaint();
+
+            // Read user data and add them all to users List. 
+            List<String[]> users = UserFileHandler.readUserFile();
             
+            System.out.println(users);
+
             for (Player player : game.getPlayers()) {
-                if (!player.hasCards() && !(player instanceof CPUPlayer)) {
-                    int totalCpuScore = game.calculateTotalCpuScore();
-                    System.out.println("Total CPU Score: " + totalCpuScore);
-                    infoPanel.updateText(player.getName() + " wins! CPU Total Score: " + totalCpuScore);
+                if (!player.hasCards()) {
+                    infoPanel.updateText(player.getName() + " wins!");
+                    
+                    System.out.println(UserSession.getCurrentUser());
+                    
+                    UserInfo currentUser = UserSession.getCurrentUser();
+                    int wins = currentUser.getWins();
+                    int losses = currentUser.getLosses();
+                    int totalScore = currentUser.getTotalScore();
+                    int totalGames = currentUser.getTotalGames();
+                    
+
+                    //update the data for the current user after the session
+                    for (String[] userDetails : users) {
+                    	
+                        if (userDetails[0].equals(UserSession.getCurrentUser().getNickname())) {
+                
+                            if (!(player instanceof CPUPlayer)) {
+                            	
+                                int totalCpuScore = game.calculateTotalCpuScore();
+                                totalScore += totalCpuScore;
+                                wins++;
+                                System.out.println("Total CPU Score: " + totalCpuScore);
+                                infoPanel.updateScore(totalCpuScore);
+                                infoPanel.repaint();
+                            } else {
+                                losses++;
+                            }
+
+                            totalGames++;
+                            userDetails[2] = String.valueOf(wins);
+                            userDetails[3] = String.valueOf(losses);
+                            userDetails[4] = String.valueOf(totalScore);
+                            userDetails[5] = String.valueOf(totalGames);
+
+                            break;
+                        }
+                    }
+
+                    // Write the updated data back to the file
+                    UserFileHandler.writeUserFile(users);
+
                     break;
                 }
             }
-            
         }
     }
+    
+    
+    
+
     /**
      * Checks if it's the current player's turn to play the clicked card.
      *
@@ -173,7 +224,7 @@ public class Rules implements Constants {
      */
     private void performAction(ViewCard actionCard) {
         switch (actionCard.getCardValue()) {
-            case "+2":
+            case "2+":
                 game.drawPlus(2);
                 break;
             case "Skip":
@@ -208,7 +259,7 @@ public class Rules implements Constants {
             functionCard.useWildColor(UNO_COLORS[colors.indexOf(chosenColor)]);
         }
 
-        if (functionCard.getCardValue().equals("DrawFour")) {
+        if (functionCard.getCardValue().equals("4+")) {
             game.drawPlus(4);
         }
     }

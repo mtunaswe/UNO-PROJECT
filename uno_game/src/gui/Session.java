@@ -29,7 +29,7 @@ public class Session extends JPanel {
         setPlayers();
         table = new TablePanel(firstCard);
 
-     // Container for CPU panels
+        // Container for CPU panels
         JPanel eastCpuArea = new JPanel();
         JPanel westCpuArea = new JPanel();
         JPanel northCpuArea = new JPanel();
@@ -58,16 +58,26 @@ public class Session extends JPanel {
     }
 
     private void distributeCPUPanels(JPanel east, JPanel west, JPanel north) {
-        int count = 1; // Start from 1 to skip human player
+        int totalCPUs = playerPanels.size() - 1; // Excluding the human player
+        int groupSize = totalCPUs / 3;
+        int extra = totalCPUs % 3;
+
+        int count = 0;
         for (JPanel panel : playerPanels) {
             if (panel instanceof CPUPanel) {
-                if (count % 3 == 1) north.add(panel);
-                else if (count % 3 == 2) east.add(panel);
-                else west.add(panel);
+                if (count < groupSize + (extra > 0 ? 1 : 0)) {
+                    west.add(panel, 0); // Adding to the bottom of the stack
+                    extra--;
+                } else if (count < 2 * groupSize + (extra > 1 ? 1 : 0)) {
+                    north.add(panel);
+                } else {
+                    east.add(panel);
+                }
                 count++;
             }
         }
     }
+
 
     private void setPlayers() {
         Player[] players = game.getPlayers();
@@ -79,7 +89,6 @@ public class Session extends JPanel {
             }
         }
     }
-    
     
 
     public List<JPanel> getPlayerPanels() {

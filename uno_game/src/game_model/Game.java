@@ -57,6 +57,7 @@ public class Game implements Constants {
                 
                 if (p.getTotalCards() == 1 && !p.getSaidUNO()) {
                     infoPanel.setError(p.getName() + " Forgot to say UNO");
+                    infoPanel.repaint();
                     p.obtainCard(getCard());
                     p.obtainCard(getCard()); // Draw two cards as a penalty
                 } else if (p.getTotalCards() > 2) {
@@ -90,7 +91,8 @@ public class Game implements Constants {
      * Switches the turn to the next player based on the direction of play.
      */
     public void switchTurn() {
-        players[currentPlayerIndex].toggleTurn();
+    	players[currentPlayerIndex].toggleTurn();
+    	
 
         if (direction == Direction.Clockwise) {
             currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
@@ -98,7 +100,14 @@ public class Game implements Constants {
             currentPlayerIndex = (currentPlayerIndex - 1 + players.length) % players.length;
         }
         
+
         players[currentPlayerIndex].toggleTurn();
+        
+        Player np = players[currentPlayerIndex];
+        
+        if(np.getName().contains("CPU")) {
+        	cpu = (CPUPlayer) np;
+        }
         whoseTurn();
     }
     
@@ -116,6 +125,7 @@ public class Game implements Constants {
     public void reverseDirection() {
         direction = (direction == Direction.Clockwise) ? Direction.Counter_Clockwise : Direction.Clockwise;
         infoPanel.updateDirection(direction.toString());
+        infoPanel.repaint();
         switchTurn();
     }
     
@@ -137,6 +147,8 @@ public class Game implements Constants {
         for (int i = 0; i < times; i++) {
             nextPlayer.obtainCard(getCard());
         }
+        
+        switchTurn();
     }
     
     /**
@@ -150,6 +162,7 @@ public class Game implements Constants {
         } else {
             nextPlayerIndex = (currentPlayerIndex - 1 + players.length) % players.length;
         }
+         
         return players[nextPlayerIndex];
     }
 
@@ -161,12 +174,9 @@ public class Game implements Constants {
             if (p.isMyTurn()) {
                 infoPanel.updateText(p.getName() + "'s Turn");
                 System.out.println(p.getName() + "'s Turn");
-                if (p.getName().contains("CPU")) {
-                    cpu = (CPUPlayer) p;
-                }
-            }
+            	}
         }
-        infoPanel.setDetail(remainingCards());
+        infoPanel.setRemaining(remainingCards());
         infoPanel.repaint();
     }
     
@@ -236,6 +246,7 @@ public class Game implements Constants {
                 if (p.getTotalCards() == 2) {
                     p.saysUNO();
                     infoPanel.setError(p.getName() + " said UNO");
+                    infoPanel.repaint();
                 }
             }
         }
