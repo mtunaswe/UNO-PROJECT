@@ -4,14 +4,19 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+
+import Controller.LoadGameController;
+
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Color;
 
+import game_model.Game;
 import game_model.UserInfo;
 import game_model.UserSession;
 
@@ -65,16 +70,26 @@ public class MainMenu {
 		btnNewButton.setBounds(130, 199, 143, 23);
 		frame.getContentPane().add(btnNewButton);
 		
-		JButton btnNewButton_1 = new JButton("SAVED GAMES");
-		btnNewButton_1.setFont(new Font("Cabin", Font.PLAIN, 15));
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				
-			}
-		});
-		btnNewButton_1.setBounds(130, 229, 143, 23);
-		frame.getContentPane().add(btnNewButton_1);
+		JButton btnSavedGames = new JButton("SAVED GAMES");
+        btnSavedGames.setFont(new Font("Cabin", Font.PLAIN, 15));
+        btnSavedGames.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                int option = fileChooser.showOpenDialog(frame);
+                if (option == JFileChooser.APPROVE_OPTION) {
+                    String filePath = fileChooser.getSelectedFile().getPath();
+                    Game game = new Game(); // Create a new game instance
+                    LoadGameController loadController = new LoadGameController(game);
+                    loadController.loadGame(filePath);
+                      
+                }
+            }
+        });
+        
+        btnSavedGames.setBounds(130, 229, 143, 23);
+        frame.getContentPane().add(btnSavedGames);
 		
+
 		JButton btnNewButton_2 = new JButton("EXIT ");
 		btnNewButton_2.setFont(new Font("Cabin", Font.PLAIN, 15));
 		btnNewButton_2.addActionListener(new ActionListener() {

@@ -69,6 +69,16 @@ public class ViewCard extends JPanel implements Constants{
      * Constructor for creating a ViewCard for CPUPanel.
      * This constructor initializes the card with default settings and loads the card images.
      */
+    
+   
+    
+    public ViewCard(String cardString) {
+        String[] parts = cardString.split(",");
+        this.cardColor = RED;
+        this.type = Integer.parseInt(parts[1]);
+        this.value = parts[2];
+    }
+    
     public ViewCard() {
         this.setPreferredSize(CARDSIZE);
         this.setBorder(defaultBorder);
@@ -312,5 +322,10 @@ public class ViewCard extends JPanel implements Constants{
      */
     public String getColorName() {
         return colorMap.getOrDefault(cardColor, "Wild Card");
+    }
+    
+    @Override
+    public String toString() {
+        return colorMap.getOrDefault(cardColor, "Wild Card") + "," + type + "," + value;
     }
 }

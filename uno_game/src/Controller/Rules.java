@@ -54,6 +54,7 @@ public class Rules implements Constants {
     private void modifyFirstCard(ViewCard firstCard) {
         firstCard.removeMouseListener(CARDLISTENER);
         if (firstCard instanceof WildCard) {
+        	game.setCpu((CPUPlayer) (game.getPlayers()[1]));
             int random = new Random().nextInt() % 4;
             try {
                 ((WildCard) firstCard).useWildColor(UNO_COLORS[Math.abs(random)]);

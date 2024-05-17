@@ -1,6 +1,7 @@
 package game_model;
 
 import java.util.LinkedList;
+import java.util.List;
 
 import card_model.Card;
 import card_model.WildCard;
@@ -199,6 +200,10 @@ public class Player {
      */
     public void setCards() {
         cards = new LinkedList<ViewCard>();
+    }
+    
+    public void setCards(List<ViewCard> newCards) {
+        cards = new LinkedList<>(newCards);
     }
     
     

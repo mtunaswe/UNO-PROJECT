@@ -19,7 +19,7 @@ public class Game implements Constants {
 
     Direction direction;
     
-    private CPUPlayer cpu;
+    public CPUPlayer cpu;
     private DealerShuffler dealer;
     private Stack<ViewCard> cardStack;
 
@@ -293,7 +293,15 @@ public class Game implements Constants {
         return players;
     }
 
-    public void setPlayers(Player[] players) {
+    public CPUPlayer getCpu() {
+		return cpu;
+	}
+
+	public void setCpu(CPUPlayer cpu) {
+		this.cpu = cpu;
+	}
+
+	public void setPlayers(Player[] players) {
         this.players = players;
     }
 

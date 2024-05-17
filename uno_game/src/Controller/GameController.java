@@ -1,5 +1,8 @@
 package Controller;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Stack;
 import javax.swing.JOptionPane;
 
@@ -86,4 +89,41 @@ public class GameController {
         return count;
     }
     
+    public void saveGame(String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            // Save players
+            for (Player player : game.getPlayers()) {
+                writer.write(player.getName());
+                writer.newLine();
+            }
+
+            // Save current player index
+            writer.write("CurrentPlayerIndex:" + 0);
+            writer.newLine();
+
+            // Save direction
+            writer.write("Direction:" + game.getDirection().name());
+            writer.newLine();
+            
+            // Save user hand and CPU hand sizes
+            for (Player player : game.getPlayers()) {
+                if (player instanceof CPUPlayer) {
+                    writer.write("CPUHandSize:" + player.getName() + ":" + player.getTotalCards());
+                } else {
+                    writer.write("UserHand:");
+                    for (ViewCard card : player.getAllCards()) {
+                        writer.write(card.toString() + ";");
+                    }
+                }
+                writer.newLine();
+            }
+
+         
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
+    
+

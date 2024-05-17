@@ -20,6 +20,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
+import Controller.GameController;
 import game_model.Game;
 import game_model.Player;
 
@@ -34,6 +35,7 @@ public class Session extends JPanel {
     private static Game game;
     private JTextArea eventLog;
     private JButton saveLogButton;
+    private JButton saveGameButton;
 
     /**
      * Constructs a new Session panel.
@@ -82,16 +84,39 @@ public class Session extends JPanel {
                 saveLogToFile();
             }
         });
+        
+        saveGameButton = new JButton("Save Game");
+        saveGameButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser fileChooser = new JFileChooser();
+                int option = fileChooser.showSaveDialog(Session.this);
+                if (option == JFileChooser.APPROVE_OPTION) {
+                    String filePath = fileChooser.getSelectedFile().getPath();
+                    if (!filePath.toLowerCase().endsWith(".txt")) {
+                        filePath += ".txt";
+                    }
+                    new GameController(game).saveGame(filePath);
+                }
+            }
+        });
 
         // Panel to hold the event log and save button
         JPanel logPanel = new JPanel(new BorderLayout());
         logPanel.add(scrollPane, BorderLayout.CENTER);
         logPanel.add(saveLogButton, BorderLayout.SOUTH);
+        
+        // Panel to hold the save game button.
+        JPanel logGamePanel = new JPanel(new BorderLayout());
+        logGamePanel.add(saveGameButton, BorderLayout.EAST);
 
-        // Panel to hold player panel and log panel
+        // Panel to hold player panel, log panel, and log game panel
         JPanel southPanel = new JPanel(new BorderLayout());
-        southPanel.add(playerPanels.get(0), BorderLayout.CENTER);
+        
         southPanel.add(logPanel, BorderLayout.WEST);
+        southPanel.add(playerPanels.get(0), BorderLayout.CENTER);
+        southPanel.add(logGamePanel, BorderLayout.EAST); 
+        
 
         eventLog.append("Welcome to UNO Game!\n");
 
@@ -207,6 +232,8 @@ public class Session extends JPanel {
             }
         }
     }
+    
+    
 
     @Override
     protected void paintComponent(Graphics g) {
