@@ -7,6 +7,7 @@ import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -20,9 +21,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 
-import Controller.GameController;
 import game_model.Game;
 import game_model.Player;
+import game_model.UserSession;
 
 /**
  * The Session class represents the main game session panel for the UNO game.
@@ -89,15 +90,22 @@ public class Session extends JPanel {
         saveGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                int option = fileChooser.showSaveDialog(Session.this);
-                if (option == JFileChooser.APPROVE_OPTION) {
-                    String filePath = fileChooser.getSelectedFile().getPath();
-                    if (!filePath.toLowerCase().endsWith(".txt")) {
-                        filePath += ".txt";
-                    }
-                    new GameController(game).saveGame(filePath);
+                String username = "mert"; // Replace with actual method to get username
+                String sessionName = MainMenu.getGameController().getSessionName(); // Replace with actual method to get session name
+                String fileName = username + "_" + sessionName + ".txt";
+
+                File saveDirectory = new File("saved_games");
+                if (!saveDirectory.exists()) {
+                    saveDirectory.mkdir();
                 }
+
+                File saveFile = new File(saveDirectory, fileName);
+                String filePath = saveFile.getPath();
+
+                MainMenu.getGameController().saveGame(filePath);
+                JOptionPane.showMessageDialog(Session.this, "Game saved successfully!");
+                
+                closeGameWindow();
             }
         });
 
@@ -162,7 +170,7 @@ public class Session extends JPanel {
     private void setPlayers() {
         Player[] players = game.getPlayers();
         for (int i = 0; players != null && i < players.length; i++) {
-            if (i == 0) { // Assuming the first player is always human
+            if (i == 0) { 
                 playerPanels.add(new PlayerPanel(players[i]));
             } else {
                 playerPanels.add(new CPUPanel(players[i]));
@@ -238,5 +246,12 @@ public class Session extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+    }
+    
+    private void closeGameWindow() {
+        java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(this);
+        if (window != null) {
+            window.dispose();
+        }
     }
 }

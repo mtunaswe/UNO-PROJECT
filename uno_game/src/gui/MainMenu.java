@@ -8,22 +8,25 @@ import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 
+import Controller.GameController;
 import Controller.LoadGameController;
 
 import javax.swing.ImageIcon;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.awt.event.ActionEvent;
 import java.awt.Font;
 import java.awt.Color;
 
-import game_model.Game;
 import game_model.UserInfo;
 import game_model.UserSession;
 
 
 
 public class MainMenu {
+	static GameController gameController;
 
+	
 	JFrame frame;
 
 	/**
@@ -63,32 +66,63 @@ public class MainMenu {
 		btnNewButton.setFont(new Font("Cabin", Font.PLAIN, 15));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				MainFrame mainframe = new MainFrame();
+				gameController = new GameController();
+				gameController.setupGame();
+				
+				MainFrame mainframe = new MainFrame(gameController.getGame());
                 mainframe.setVisible(true);
+                
 			}
 		});
 		btnNewButton.setBounds(130, 199, 143, 23);
 		frame.getContentPane().add(btnNewButton);
 		
 		JButton btnSavedGames = new JButton("SAVED GAMES");
-        btnSavedGames.setFont(new Font("Cabin", Font.PLAIN, 15));
-        btnSavedGames.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser fileChooser = new JFileChooser();
-                int option = fileChooser.showOpenDialog(frame);
-                if (option == JFileChooser.APPROVE_OPTION) {
-                    String filePath = fileChooser.getSelectedFile().getPath();
-                    Game game = new Game(); // Create a new game instance
-                    LoadGameController loadController = new LoadGameController(game);
-                    loadController.loadGame(filePath);
-                      
-                }
-            }
-        });
+		btnSavedGames.setFont(new Font("Cabin", Font.PLAIN, 15));
+		btnSavedGames.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		        String username = "mert"; 
+		        JFileChooser fileChooser = new JFileChooser("saved_games");
+
+		        // Custom file filter
+		        fileChooser.setFileFilter(new javax.swing.filechooser.FileFilter() {
+		            @Override
+		            public boolean accept(File file) {
+		                if (file.isDirectory()) {
+		                    return true;
+		                }
+		                String filename = file.getName();
+		                return filename.startsWith(username) && filename.endsWith(".txt");
+		            }
+
+		            @Override
+		            public String getDescription() {
+		                return "Saved games for " + username;
+		            }
+		        });
+
+		        int option = fileChooser.showOpenDialog(frame);
+		        if (option == JFileChooser.APPROVE_OPTION) {
+		            String filePath = fileChooser.getSelectedFile().getPath();
+		            File selectedFile = fileChooser.getSelectedFile();
+
+		            // Additional check to ensure the file is allowed
+		            if (selectedFile.getName().startsWith(username) && selectedFile.getName().endsWith(".txt")) {
+		                LoadGameController loadController = new LoadGameController();
+		                loadController.loadGame(filePath);
+
+		                MainFrame mainframe = new MainFrame(loadController.getGame());
+		                mainframe.setVisible(true);
+		            } else {
+		                JOptionPane.showMessageDialog(frame, "You are not allowed to open this file.", "Error", JOptionPane.ERROR_MESSAGE);
+		            }
+		        }
+		    }
+		});
+		btnSavedGames.setBounds(130, 229, 143, 23);
+		frame.getContentPane().add(btnSavedGames);
+
         
-        btnSavedGames.setBounds(130, 229, 143, 23);
-        frame.getContentPane().add(btnSavedGames);
-		
 
 		JButton btnNewButton_2 = new JButton("EXIT ");
 		btnNewButton_2.setFont(new Font("Cabin", Font.PLAIN, 15));
@@ -134,4 +168,19 @@ public class MainMenu {
 		btnNewButton_3_1.setBounds(337, 199, 89, 23);
 		frame.getContentPane().add(btnNewButton_3_1);
 	}
+	
+	public static GameController getGameController() {
+		return gameController;
+	}
+
+	@SuppressWarnings("static-access")
+	public void setGameController(GameController gameController) {
+		this.gameController = gameController;
+	}
+		
+
+
 }
+
+
+

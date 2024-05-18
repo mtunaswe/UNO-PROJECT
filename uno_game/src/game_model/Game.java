@@ -2,8 +2,6 @@ package game_model;
 
 import java.util.Stack;
 
-import Controller.GameController;
-
 import Interfaces.Constants;
 
 import gui.ViewCard;
@@ -35,7 +33,7 @@ public class Game implements Constants {
      */
     public Game() {
         isOver = false;
-        new GameController(this).setupGame();
+       
     }
 
     /**
@@ -103,11 +101,16 @@ public class Game implements Constants {
 
         players[currentPlayerIndex].toggleTurn();
         
-        Player np = players[currentPlayerIndex];
-        
-        if(np.getName().contains("CPU")) {
-        	cpu = (CPUPlayer) np;
+        System.out.println("Classes of all players:");
+        for (Player player : players) {
+            System.out.println(player.getClass().getName());
         }
+        
+        if(players[currentPlayerIndex].getName().contains("CPU")) {
+        	cpu = (CPUPlayer) players[currentPlayerIndex];
+        }
+        
+        
         whoseTurn();
     }
     
@@ -115,7 +118,6 @@ public class Game implements Constants {
      * Skips the turn of the next player.
      */
     public void skipTurn() {
-        switchTurn();
         switchTurn(); // Skip the next player's turn
     }
     
@@ -173,7 +175,7 @@ public class Game implements Constants {
         for (Player p : players) {
             if (p.isMyTurn()) {
                 infoPanel.updateText(p.getName() + "'s Turn");
-                System.out.println(p.getName() + "'s Turn");
+               
             	}
         }
         infoPanel.setRemaining(remainingCards());
@@ -276,8 +278,7 @@ public class Game implements Constants {
     public ViewCard playPC(ViewCard topCard) {
         if (cpu.isMyTurn()) {
             boolean playable = cpu.play(topCard);
-            System.out.println(cpu.getName() + " played.");
-            System.out.println(cpu.getTotalCards() + " left");
+           
             if (!playable) {
                 drawCard(topCard);
                 return null;

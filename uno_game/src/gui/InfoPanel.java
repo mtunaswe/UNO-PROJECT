@@ -16,6 +16,7 @@ public class InfoPanel extends JPanel {
     private String error;
     private String text;
     private String directionText;
+    private String sessionName;
     private int panelCenter;
     private int rest = 0;
 	private int score;
@@ -27,9 +28,11 @@ public class InfoPanel extends JPanel {
     public InfoPanel() {
         setPreferredSize(new Dimension(275, 200));
         setOpaque(false);
+        
         error = "";
         text = "Game Started";
         directionText = "Clockwise";
+        sessionName = "";
         
         updateText(text);
         updateDirection(directionText);
@@ -50,7 +53,18 @@ public class InfoPanel extends JPanel {
         printError(g);
         printRemaining(g);
         printDirection(g);
+        printSessionName(g);
         
+    }
+    
+    private void printSessionName(Graphics g) {
+        if (!sessionName.isEmpty()) {
+            Font adjustedFont = new Font("Cabin", Font.BOLD, 20);
+            FontMetrics fm = this.getFontMetrics(adjustedFont);
+            g.setColor(new Color(0, 0, 0));
+            int xPos = panelCenter - fm.stringWidth(sessionName) / 2;
+            g.drawString("Session: " + sessionName, xPos, 20);
+        }
     }
 
     
@@ -187,4 +201,13 @@ public class InfoPanel extends JPanel {
 		
 		
 	}
+	
+	/**
+     * Sets the session name to be displayed and repaints the panel.
+     * 
+     * @param sessionName the session name
+     */
+    public void setSessionName(String sessionName) {
+        this.sessionName = sessionName;
+    }
 }

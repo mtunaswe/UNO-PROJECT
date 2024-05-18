@@ -7,7 +7,7 @@ import java.awt.Color;
  * It extends the Card class and provides specific functionality
  * for wild cards, including color selection and score retrieval.
  */
-public class WildCard extends Card {
+public class WildCard extends Card{
     private static final long serialVersionUID = 1L;
     private Color colorSelected;
 
@@ -19,7 +19,7 @@ public class WildCard extends Card {
      * @param score the score of the card
      */
     public WildCard(String cardValue, int score) {
-        super(Color.BLACK, WILD, cardValue, score);
+        super(BLACK, WILD, cardValue, score);
     }
 
     /**

@@ -17,6 +17,7 @@ public interface Constants {
 	Color BLUE = new Color(53, 129, 216);
 	Color GREEN = new Color(40, 204, 45);
 	Color YELLOW = new Color(255, 225, 53);
+	Color BLACK = Color.BLACK;
 	
 	Color[] UNO_COLORS = {RED, BLUE, GREEN, YELLOW};
 	int[] UNO_NUMBERS = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9};

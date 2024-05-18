@@ -62,6 +62,7 @@ public class ViewCard extends JPanel implements Constants{
         colorMap.put(BLUE, "Blue");
         colorMap.put(GREEN, "Green");
         colorMap.put(YELLOW, "Yellow");
+        colorMap.put(BLACK, "Wild Card");
     }
 
 
@@ -74,9 +75,28 @@ public class ViewCard extends JPanel implements Constants{
     
     public ViewCard(String cardString) {
         String[] parts = cardString.split(",");
-        this.cardColor = RED;
+        this.cardColor = getKeyByValue(colorMap,parts[0]);
         this.type = Integer.parseInt(parts[1]);
         this.value = parts[2];
+        
+        this.setPreferredSize(CARDSIZE);
+        this.setBorder(defaultBorder);
+
+        this.addMouseListener(new MouseHandler());
+        loadImages();
+    }
+    
+    /* *
+     * Helper method to get the key by value on HashMap
+     * 
+     */
+    public static <K, V> K getKeyByValue(Map<K, V> map, V value) {
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            if (entry.getValue().equals(value)) {
+                return entry.getKey();
+            }
+        }
+        return null;
     }
     
     public ViewCard() {
@@ -323,9 +343,5 @@ public class ViewCard extends JPanel implements Constants{
     public String getColorName() {
         return colorMap.getOrDefault(cardColor, "Wild Card");
     }
-    
-    @Override
-    public String toString() {
-        return colorMap.getOrDefault(cardColor, "Wild Card") + "," + type + "," + value;
-    }
+     
 }
