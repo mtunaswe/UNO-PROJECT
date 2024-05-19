@@ -8,7 +8,7 @@ import java.util.Stack;
 import javax.swing.JOptionPane;
 
 import Interfaces.Constants;
-
+import gui.Session;
 import gui.ViewCard;
 
 /**
@@ -28,6 +28,7 @@ public class Game implements Constants {
     private Stack<ViewCard> cardStack;
 	private String sessionName;
     private ViewCard lastCardPlayed;
+	private Session session;
 
     /**
      * Enum representing the direction of play.
@@ -41,6 +42,14 @@ public class Game implements Constants {
      */
     public Game() {
         isOver = false;
+    }
+    
+    /**
+     * Sets the session for the game.
+     * @param session the session to be set.
+     */
+    public void setSession(Session session) {
+        this.session = session;
     }
 
     /**
@@ -84,6 +93,7 @@ public class Game implements Constants {
             if (p.isMyTurn()) {
                 ViewCard newCard = getCard();
                 p.obtainCard(newCard);
+                logDrawEvent(p, newCard);
                 canPlay = p.canPlay(topCard, newCard);
                 break;
             }
@@ -92,6 +102,23 @@ public class Game implements Constants {
         if (!canPlay)
             switchTurn();
     }
+    
+    /**
+     * Logs the draw event for the current player.
+     *
+     * @param currentPlayer the current player drawing the card
+     * @param newCard the card that was drawn
+     */
+    private void logDrawEvent(Player currentPlayer, ViewCard newCard) {
+        String drawEvent;
+        if (currentPlayer instanceof CPUPlayer) {
+            drawEvent = "CPU " + currentPlayer.getName() + " drew a card";
+        } else {
+            drawEvent = UserSession.getCurrentUser().getNickname() + " drew a " + newCard.getColorName() + " " + newCard.getCardValue() + " card";
+        }
+        session.logEvent(drawEvent);
+    }
+
     
     /**
      * Switches the turn to the next player based on the direction of play.

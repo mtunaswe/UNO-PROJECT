@@ -10,11 +10,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -222,24 +223,30 @@ public class Session extends JPanel {
     }
 
     /**
-     * Saves the contents of the event log to a file.
+     * Saves the log to a file in the "logs" directory under the project.
+     * The file is automatically named using the session name and the current timestamp.
      */
     private void saveLogToFile() {
-        JFileChooser fileChooser = new JFileChooser();
-        int option = fileChooser.showSaveDialog(this);
-        if (option == JFileChooser.APPROVE_OPTION) {
-            String filePath = fileChooser.getSelectedFile().getPath();
-            if (!filePath.toLowerCase().endsWith(".txt")) {
-                filePath += ".txt";
-            }
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-                eventLog.write(writer);
-                JOptionPane.showMessageDialog(this, "Log saved successfully!");
-            } catch (IOException e) {
-                JOptionPane.showMessageDialog(this, "Error saving log: " + e.getMessage());
-            }
+        // Ensure the "logs" directory exists
+        File logDirectory = new File("logs");
+        if (!logDirectory.exists()) {
+            logDirectory.mkdir();
+        }
+
+        // Create the file name using the session name and current timestamp
+        String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String fileName = game.getSessionName() + "_" + timestamp + ".txt";
+        String filePath = new File(logDirectory, fileName).getPath();
+
+        // Save the log to the file
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            eventLog.write(writer);
+            JOptionPane.showMessageDialog(this, "Log saved successfully!");
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(this, "Error saving log: " + e.getMessage());
         }
     }
+
     
     
 
@@ -253,5 +260,9 @@ public class Session extends JPanel {
         if (window != null) {
             window.dispose();
         }
+    }
+    
+    public String getEventLog() {
+        return eventLog.getText();
     }
 }

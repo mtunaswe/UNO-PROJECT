@@ -80,10 +80,7 @@ public class MainMenu {
 		btnSavedGames.setFont(new Font("Cabin", Font.PLAIN, 15));
 		btnSavedGames.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		    	
-		    	
-		    	
-		        String username = UserSession.getCurrentUser().getNickname(); 
+		        String username = UserSession.getCurrentUser().getNickname(); // Replace with actual method to get username
 		        JFileChooser fileChooser = new JFileChooser("saved_games");
 
 		        // Custom file filter
@@ -106,19 +103,24 @@ public class MainMenu {
 		        int option = fileChooser.showOpenDialog(frame);
 		        if (option == JFileChooser.APPROVE_OPTION) {
 		            String filePath = fileChooser.getSelectedFile().getPath();
-		                     
-		            LoadGameController loadController = new LoadGameController();
-	                loadController.loadGame(filePath);
+		            File selectedFile = fileChooser.getSelectedFile();
 
-	                MainFrame mainframe = new MainFrame(loadController.getGame());
-	                mainframe.setVisible(true);
-          
-		           
+		            // Additional check to ensure the file is allowed
+		            if (selectedFile.getName().startsWith(username) && selectedFile.getName().endsWith(".txt")) {
+		                LoadGameController loadController = new LoadGameController();
+		                loadController.loadGame(filePath);
+
+		                MainFrame mainframe = new MainFrame(loadController.getGame());
+		                mainframe.setVisible(true);
+		            } else {
+		                JOptionPane.showMessageDialog(frame, "You are not allowed to open this file.", "Error", JOptionPane.ERROR_MESSAGE);
+		            }
 		        }
 		    }
 		});
 		btnSavedGames.setBounds(130, 229, 143, 23);
 		frame.getContentPane().add(btnSavedGames);
+
 
         
 

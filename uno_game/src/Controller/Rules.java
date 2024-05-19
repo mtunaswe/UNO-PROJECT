@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 import javax.swing.JOptionPane;
+import javax.swing.SwingWorker;
 
 import Interfaces.Constants;
 import card_model.NumberCard;
@@ -17,6 +18,7 @@ import game_model.Player;
 import game_model.UserFileHandler;
 import game_model.UserInfo;
 import game_model.UserSession;
+import gui.ResultWindow;
 import gui.Session;
 import gui.ViewCard;
 
@@ -26,6 +28,7 @@ public class Rules implements Constants {
     private Stack<ViewCard> discardCards;
     
     public boolean canPlay;
+	private String winner;
 
     /**
      * Constructs the Rules controller for the game, initializing the game state,
@@ -36,13 +39,16 @@ public class Rules implements Constants {
     public Rules(Game game) {
     	this.game = game;
         discardCards = new Stack<ViewCard>();
-
+        
         // First Card
         ViewCard firstCard = (game.isLoadedGame()) ? game.getLastCardPlayed() : game.getCard();
-        modifyFirstCard(firstCard);
 
         discardCards.add(firstCard);
         session = new Session(game, firstCard);
+        
+        modifyFirstCard(firstCard);
+        
+        game.setSession(session);
 
         game.whoseTurn();
         canPlay = true;
@@ -64,7 +70,9 @@ public class Rules implements Constants {
             } catch (Exception ex) {
                 System.out.println("something wrong with modifyFirstcard");
             }
+            
         }
+        session.updatePanel(firstCard);
     }
     
     /**
@@ -170,6 +178,7 @@ public class Rules implements Constants {
             canPlay = false;
             infoPanel.updateText("GAME OVER");
             infoPanel.repaint();
+          
 
             // Read user data and add them all to users List.
             List<String[]> users = UserFileHandler.readUserFile();
@@ -177,6 +186,7 @@ public class Rules implements Constants {
             for (Player player : game.getPlayers()) {
                 if (!player.hasCards()) {
                     infoPanel.updateText(player.getName() + " wins!");
+                    winner = player.getName();
                     logWon(player);
                  
                     UserInfo currentUser = UserSession.getCurrentUser();
@@ -214,12 +224,40 @@ public class Rules implements Constants {
 
                     // Delete the saved game file
                     deleteSavedGameFile(game.getSessionName());
+                    
+                    // Show results and close game after 3 seconds delay
+                    showResultsAndCloseGame();
 
                     break;
                 }
             }
         }
     }
+    
+
+
+	 private void showResultsAndCloseGame() {
+
+	     SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+	         @Override
+	         protected Void doInBackground() throws Exception {
+	             Thread.sleep(3000);
+	             return null;
+	         }
+	
+	         @Override
+	         protected void done() {  
+	             java.awt.Window window = javax.swing.SwingUtilities.getWindowAncestor(session);
+	             if (window != null) {
+	                 window.dispose();
+	             }
+	             new ResultWindow(session.getEventLog(), game.getSessionName(), winner, game.calculateTotalCpuScore());
+	         }
+	     };
+	     worker.execute();
+	 }
+
+
 
     /**
      * Deletes the saved game file associated with the given session name.
@@ -370,8 +408,9 @@ public class Rules implements Constants {
      * Requests a card to be drawn from the deck.
      */
     public void requestCard() {
+    	
         game.drawCard(peekTopCard());
-
+        
         if (canPlay) {
             if (game.isPCsTurn()) {
                 ViewCard playedCard = game.playPC(peekTopCard());
@@ -383,7 +422,11 @@ public class Rules implements Constants {
         session.refreshPanel();
     }
 
-    /**
+    public void setSession(Session session) {
+		this.session = session;
+	}
+
+	/**
      * Peeks at the top card on the discard stack.
      *
      * @return the top card on the discard stack
