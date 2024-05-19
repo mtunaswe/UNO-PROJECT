@@ -1,0 +1,7 @@
+module:uno_game
+card_model
+Controller
+game_model
+gui
+Interfaces
+Runnable

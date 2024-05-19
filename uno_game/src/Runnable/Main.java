@@ -19,7 +19,6 @@ public class Main {
 	
 	public static void main(String[] args) {
 		
-		//Create Frame and invoke it.
 		SwingUtilities.invokeLater(new Runnable() {					
 			public void run() {
 				JFrame frame = new LoginPage();
