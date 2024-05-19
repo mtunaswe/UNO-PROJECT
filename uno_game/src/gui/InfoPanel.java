@@ -269,6 +269,14 @@ public class InfoPanel extends JPanel {
 		
 	}
 	
+	public int getScore() {
+		return score;
+	}
+
+	public void setScore(int score) {
+		this.score = score;
+	}
+
 	/**
      * Sets the session name to be displayed and repaints the panel.
      * 

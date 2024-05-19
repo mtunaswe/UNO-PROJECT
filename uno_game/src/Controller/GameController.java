@@ -21,6 +21,7 @@ public class GameController implements Constants{
      */
     public GameController() {
     	game = new Game();
+    	infoPanel.setScore(0);
     
     }
 

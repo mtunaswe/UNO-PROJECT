@@ -30,6 +30,7 @@ public class LoadGameController implements Constants {
     public LoadGameController() {
         game = new Game();
         game.setLoadedGame(true);
+        infoPanel.setScore(0);
     }
 
     /**
@@ -185,7 +186,7 @@ public class LoadGameController implements Constants {
             case 2: 
                 return new ActionCard(color, value, 20);
             case 3: 
-                return new WildCard(value.equals("+4") ? W_DRAW4 : W_NORMAL, value.equals("+4") ? 50 : 40);
+                return new WildCard(value.equals("4+") ? W_DRAW4 : W_NORMAL, value.equals("4+") ? 50 : 40);
             default:
                 throw new IllegalArgumentException("Unknown card type: " + cardType);
         }

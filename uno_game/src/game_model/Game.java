@@ -112,7 +112,7 @@ public class Game implements Constants {
     private void logDrawEvent(Player currentPlayer, ViewCard newCard) {
         String drawEvent;
         if (currentPlayer instanceof CPUPlayer) {
-            drawEvent = "CPU " + currentPlayer.getName() + " drew a card";
+            drawEvent = currentPlayer.getName() + " drew a card";
         } else {
             drawEvent = UserSession.getCurrentUser().getNickname() + " drew a " + newCard.getColorName() + " " + newCard.getCardValue() + " card";
         }

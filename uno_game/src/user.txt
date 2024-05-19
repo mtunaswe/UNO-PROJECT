@@ -1,6 +1,6 @@
 mert, mert1234_, 1, 1, 150, 2
 cago, cago_!123, 1, 3, 162, 4
-baldeniz, denom_12345, 4, 6, 493, 10
+baldeniz, denom_12345, 6, 7, 561, 13
 onur, apcag!123, 2, 5, 302, 7
 baho, bahadır_swinger33, 1, 4, 270, 5
 mengu, penguin_2002, 3, 6, 508, 9

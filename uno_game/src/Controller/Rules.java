@@ -273,9 +273,7 @@ public class Rules implements Constants {
             } else {
                 System.out.println("Failed to delete the saved game file.");
             }
-        } else {
-            System.out.println("Saved game file not found.");
-        }
+        } 
     }
 
     /**
