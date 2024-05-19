@@ -103,6 +103,11 @@ public class InfoPanel extends JPanel {
         
     }
     
+    /**
+     * Prints the session name at the top of the panel.
+     * @param g the Graphics object used for painting
+     */
+    
     private void printSessionName(Graphics g) {
         if (!sessionName.isEmpty()) {
             Font adjustedFont = new Font("Cabin", Font.BOLD, 20);
@@ -117,7 +122,7 @@ public class InfoPanel extends JPanel {
     
 
 	/**
-     * Prints an error message in red at the top of the panel.
+     * Prints an error message in red below the session name.
      * 
      * @param g the Graphics object used for painting
      */
@@ -226,7 +231,7 @@ public class InfoPanel extends JPanel {
     }
 
     /**
-     * Updates the direction of play message and repaints the panel.
+     * Updates the direction image of play  and repaints the panel.
      * 
      * @param newDirection the new direction of play
      */

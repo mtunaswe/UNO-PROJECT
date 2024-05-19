@@ -26,6 +26,8 @@ public class MainFrame extends JFrame implements Constants{
 
     /**
      * Constructs the MainFrame and sets up the game session.
+     * 
+     * @param game the Game object representing the current game session
      */
     public MainFrame(Game game) { 
     	this.setGame(game);

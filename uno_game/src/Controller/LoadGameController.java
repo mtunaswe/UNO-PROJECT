@@ -149,7 +149,12 @@ public class LoadGameController implements Constants {
             game.setCardStack(cardStack);
 
             players[0].setCards(userHand);
-            players[0].toggleTurn();
+            
+            Player playerStart = players[game.getCurrentPlayerIndex()];
+            if(playerStart instanceof CPUPlayer){
+            	game.setCpu((CPUPlayer) playerStart);
+            }
+            playerStart.toggleTurn();
 
             for (int i = 0; i < cpusHand.size(); i++) {
                 players[i + 1].setCards(cpusHand.get(i));

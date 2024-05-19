@@ -51,12 +51,5 @@ public class DealerShuffler implements Constants{
         }
     }
     
-    /**
-     * Retrieves a card from the top of the stack.
-     * 
-     * @return the top card from the stack
-     */
-    public ViewCard getCard() {
-        return cardStack.pop();
-    }
+  
 }
