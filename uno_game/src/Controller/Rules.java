@@ -1,6 +1,7 @@
 package Controller;
 
 import java.awt.Color;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -29,13 +30,15 @@ public class Rules implements Constants {
     /**
      * Constructs the Rules controller for the game, initializing the game state,
      * setting up the first card, and preparing the game session.
+     *
+     * @param game the Game instance representing the current game state
      */
     public Rules(Game game) {
     	this.game = game;
         discardCards = new Stack<ViewCard>();
 
         // First Card
-        ViewCard firstCard = game.getCard();
+        ViewCard firstCard = (game.isLoadedGame()) ? game.getLastCardPlayed() : game.getCard();
         modifyFirstCard(firstCard);
 
         discardCards.add(firstCard);
@@ -46,8 +49,7 @@ public class Rules implements Constants {
     }
 
     /**
-     * Custom settings for the first card, if it 
-     * is a WildCard.
+     * Custom settings for the first card, if it is a WildCard.
      *
      * @param firstCard the first card to be modified
      */
@@ -107,11 +109,10 @@ public class Rules implements Constants {
                 game.switchTurn();
                 session.updatePanel(clickedCard);
                 
-                if(clickedCard instanceof NumberCard) {
-                	  logNumberPlayEvent(clickedCard, currentPlayerName);
-                	
-                }else {
-                	logFunctionPlayEvent(clickedCard, currentPlayerName);
+                if (clickedCard instanceof NumberCard) {
+                    logNumberPlayEvent(clickedCard, currentPlayerName);
+                } else {
+                    logFunctionPlayEvent(clickedCard, currentPlayerName);
                 }
              
                 checkResults();
@@ -128,43 +129,50 @@ public class Rules implements Constants {
                 if (playedCard != null) {
                     game.removePlayedCard(playedCard);
                     session.updatePanel(clickedCard);
-                    
                 }
             }
         }
     }
-    
 
+    /**
+     * Logs the event of a number card being played.
+     *
+     * @param playedCard the card that was played
+     * @param currentPlayerName the name of the current player
+     */
     private void logNumberPlayEvent(ViewCard playedCard, String currentPlayerName) {
         String cardDetails = playedCard.getColorName() + " " + playedCard.getCardValue();
         String event = currentPlayerName + " played " + cardDetails;
         session.logEvent(event);
     }
 
-    
+    /**
+     * Logs the event of a function card being played.
+     *
+     * @param playedCard the card that was played
+     * @param currentPlayerName the name of the current player
+     */
     private void logFunctionPlayEvent(ViewCard playedCard, String currentPlayerName) {
         String functionDetails = playedCard.getColorName() + " " + playedCard.getCardValue();
         if (playedCard instanceof WildCard) {
             functionDetails += " and chose " + ((WildCard) playedCard).getWildColorName() + " color";
         }
-        String event =  currentPlayerName + " played " + functionDetails;
+        String event = currentPlayerName + " played " + functionDetails;
         session.logEvent(event);
     }
 
     /**
      * Checks if the game is over and sums the scores of the remaining cards in CPUs' decks.
+     * Deletes the saved game file if the game is over.
      */
-    
-   
-	private void checkResults() {
+    private void checkResults() {
         if (game.isOver()) {
             canPlay = false;
             infoPanel.updateText("GAME OVER");
             infoPanel.repaint();
 
-            // Read user data and add them all to users List. 
+            // Read user data and add them all to users List.
             List<String[]> users = UserFileHandler.readUserFile();
-                   
 
             for (Player player : game.getPlayers()) {
                 if (!player.hasCards()) {
@@ -176,19 +184,14 @@ public class Rules implements Constants {
                     int losses = currentUser.getLosses();
                     int totalScore = currentUser.getTotalScore();
                     int totalGames = currentUser.getTotalGames();
-                    
 
-                    //update the data for the current user after the session
+                    // Update the data for the current user after the session
                     for (String[] userDetails : users) {
-                    	
                         if (userDetails[0].equals(UserSession.getCurrentUser().getNickname())) {
-                
                             if (!(player instanceof CPUPlayer)) {
-                            	
                                 int totalCpuScore = game.calculateTotalCpuScore();
                                 totalScore += totalCpuScore;
                                 wins++;
-                                //System.out.println("Total CPU Score: " + totalCpuScore);
                                 infoPanel.updateScore(totalCpuScore);
                                 infoPanel.repaint();
                                 logScore(player, totalScore);
@@ -209,28 +212,54 @@ public class Rules implements Constants {
                     // Write the updated data back to the file
                     UserFileHandler.writeUserFile(users);
 
+                    // Delete the saved game file
+                    deleteSavedGameFile(game.getSessionName());
+
                     break;
                 }
             }
         }
     }
-	
-	private void logScore(Player player, int totalScore) {
-		String CPUscore = "Total Score of "+ player.getName() + "is" + totalScore;
-	
-	    session.logEvent(CPUscore);
-	        
-	}
-	
-	private void logWon(Player player) {
-		String event = player.getName() + " won the UNO game!!! ";
-		
-		session.logEvent(event);
-		
-	}
-    
-    
-    
+
+    /**
+     * Deletes the saved game file associated with the given session name.
+     *
+     * @param sessionName the name of the session whose file is to be deleted
+     */
+    private void deleteSavedGameFile(String sessionName) {
+        String filePath = "saved_games/" + UserSession.getCurrentUser().getNickname() + "_" + sessionName + ".txt";
+        File file = new File(filePath);
+        if (file.exists()) {
+            if (file.delete()) {
+                System.out.println("Saved game file deleted successfully.");
+            } else {
+                System.out.println("Failed to delete the saved game file.");
+            }
+        } else {
+            System.out.println("Saved game file not found.");
+        }
+    }
+
+    /**
+     * Logs the total score of a CPU player.
+     *
+     * @param player the CPU player
+     * @param totalScore the total score of the CPU player
+     */
+    private void logScore(Player player, int totalScore) {
+        String CPUscore = "Total Score of " + player.getName() + " is " + totalScore;
+        session.logEvent(CPUscore);
+    }
+
+    /**
+     * Logs the event of a player winning the game.
+     *
+     * @param player the player who won the game
+     */
+    private void logWon(Player player) {
+        String event = player.getName() + " won the UNO game!!! ";
+        session.logEvent(event);
+    }
 
     /**
      * Checks if it's the current player's turn to play the clicked card.
@@ -289,8 +318,7 @@ public class Rules implements Constants {
     	Color chosenColor;
         if (game.isPCsTurn()) {
         	chosenColor = getMostCommonColor((CPUPlayer) game.getCurrentPlayer());
-           
-            functionCard.useWildColor(chosenColor);    
+            functionCard.useWildColor(chosenColor);
         } else {
             ArrayList<String> colors = new ArrayList<>();
             colors.add("RED");
@@ -307,12 +335,15 @@ public class Rules implements Constants {
 
         if (functionCard.getCardValue().equals("4+")) {
             game.drawPlus(4);
-          
         }
-        
-        
     }
     
+    /**
+     * Determines the most common color in the CPU player's hand.
+     *
+     * @param cpu the CPU player
+     * @return the most common color in the CPU player's hand
+     */
     private Color getMostCommonColor(CPUPlayer cpu) {
         int[] colorCounts = new int[UNO_COLORS.length];
         
@@ -334,7 +365,6 @@ public class Rules implements Constants {
 
         return UNO_COLORS[maxCountIndex];
     }
-
 
     /**
      * Requests a card to be drawn from the deck.

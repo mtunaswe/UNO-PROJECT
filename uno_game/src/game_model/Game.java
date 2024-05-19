@@ -1,6 +1,11 @@
 package game_model;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Stack;
+
+import javax.swing.JOptionPane;
 
 import Interfaces.Constants;
 
@@ -14,12 +19,15 @@ public class Game implements Constants {
     private Player[] players;
     private boolean isOver;
     private int currentPlayerIndex;
+    private boolean isLoadedGame;
 
     Direction direction;
     
     public CPUPlayer cpu;
     private DealerShuffler dealer;
     private Stack<ViewCard> cardStack;
+	private String sessionName;
+    private ViewCard lastCardPlayed;
 
     /**
      * Enum representing the direction of play.
@@ -33,7 +41,6 @@ public class Game implements Constants {
      */
     public Game() {
         isOver = false;
-       
     }
 
     /**
@@ -41,7 +48,7 @@ public class Game implements Constants {
      * @return the card drawn from the dealer.
      */
     public ViewCard getCard() {
-        return dealer.getCard();
+        return getCardStack().pop();
     }
     
     /**
@@ -52,6 +59,7 @@ public class Game implements Constants {
         for (Player p : players) {
             if (p.hasCard(playedCard)){
                 p.removeCard(playedCard);
+                lastCardPlayed = playedCard;
                 
                 if (p.getTotalCards() == 1 && !p.getSaidUNO()) {
                     infoPanel.setError(p.getName() + " Forgot to say UNO");
@@ -90,26 +98,18 @@ public class Game implements Constants {
      */
     public void switchTurn() {
     	players[currentPlayerIndex].toggleTurn();
-    	
 
         if (direction == Direction.Clockwise) {
             currentPlayerIndex = (currentPlayerIndex + 1) % players.length;
         } else {
             currentPlayerIndex = (currentPlayerIndex - 1 + players.length) % players.length;
         }
-        
 
         players[currentPlayerIndex].toggleTurn();
-        
-        System.out.println("Classes of all players:");
-        for (Player player : players) {
-            System.out.println(player.getClass().getName());
-        }
         
         if(players[currentPlayerIndex].getName().contains("CPU")) {
         	cpu = (CPUPlayer) players[currentPlayerIndex];
         }
-        
         
         whoseTurn();
     }
@@ -126,7 +126,7 @@ public class Game implements Constants {
      */
     public void reverseDirection() {
         direction = (direction == Direction.Clockwise) ? Direction.Counter_Clockwise : Direction.Clockwise;
-        infoPanel.updateDirection(direction.toString());
+        infoPanel.updateDirection(direction);
         infoPanel.repaint();
         switchTurn();
     }
@@ -175,8 +175,7 @@ public class Game implements Constants {
         for (Player p : players) {
             if (p.isMyTurn()) {
                 infoPanel.updateText(p.getName() + "'s Turn");
-               
-            	}
+            }
         }
         infoPanel.setRemaining(remainingCards());
         infoPanel.repaint();
@@ -203,7 +202,6 @@ public class Game implements Constants {
     public Player getCurrentPlayer() {
         return players[currentPlayerIndex];
     }
-
 
     /**
      * Checks if the game is over.
@@ -262,6 +260,60 @@ public class Game implements Constants {
         }
     }
     
+    public void saveGame(String filePath) {
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
+            // Save session name
+            writer.write("SessionName:" + getSessionName());
+            writer.newLine();
+            // Save players
+            for (Player player : getPlayers()) {
+                writer.write(player.getName());
+                writer.newLine();
+            }
+
+            // Save current player index
+            writer.write("CurrentPlayerIndex:" + getCurrentPlayerIndex());
+            writer.newLine();
+
+            // Save direction
+            writer.write("Direction:" + getDirection().name());
+            writer.newLine();
+
+            // Save user hand and CPU hand sizes
+            for (Player player : getPlayers()) {
+                if (player instanceof CPUPlayer) {
+                    writer.write("CPUHand:");
+                    for (ViewCard card : player.getAllCards()) {
+                        writer.write(card.getColorName() + "," + card.getType() + "," + card.getCardValue() + ";");
+                    }
+                } else {
+                    writer.write("UserHand:");
+                    for (ViewCard card : player.getAllCards()) {
+                        writer.write(card.getColorName() + "," + card.getType() + "," + card.getCardValue() + ";");
+                    }
+                }
+                writer.newLine();
+            }
+
+            // Save remaining cards in deck
+            writer.write("Deck:");
+            for (ViewCard card : cardStack) {
+                writer.write(card.getColorName() + "," + card.getType() + "," + card.getCardValue() + ";");
+            }
+            writer.newLine();
+
+            // Save last card played
+            if (lastCardPlayed != null) {
+                writer.write("LastCardPlayed:" + lastCardPlayed.getColorName() + "," + lastCardPlayed.getType() + "," + lastCardPlayed.getCardValue());
+                writer.newLine();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Error saving game: " + e.getMessage());
+        }
+    }
+
     /**
      * Checks if it is the CPU's turn to play.
      * @return true if it is the CPU's turn, false otherwise.
@@ -283,6 +335,7 @@ public class Game implements Constants {
                 drawCard(topCard);
                 return null;
             }
+            lastCardPlayed = topCard;
             return topCard;
         }
         return null;
@@ -326,8 +379,36 @@ public class Game implements Constants {
         currentPlayerIndex = index;
     }
 
+    public int getCurrentPlayerIndex() {
+        return currentPlayerIndex;
+    }
+
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
 
+	public String getSessionName() {
+		return sessionName;
+	}
+
+	public void setSessionName(String sessionName) {
+		this.sessionName = sessionName;
+        infoPanel.setSessionName(sessionName);
+	}
+
+    public ViewCard getLastCardPlayed() {
+        return lastCardPlayed;
+    }
+
+    public void setLastCardPlayed(ViewCard lastCardPlayed) {
+        this.lastCardPlayed = lastCardPlayed;
+    }
+
+    public boolean isLoadedGame() {
+        return isLoadedGame;
+    }
+
+    public void setLoadedGame(boolean loadedGame) {
+        isLoadedGame = loadedGame;
+    }
 }

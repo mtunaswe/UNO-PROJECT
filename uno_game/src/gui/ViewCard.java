@@ -71,7 +71,6 @@ public class ViewCard extends JPanel implements Constants{
      * This constructor initializes the card with default settings and loads the card images.
      */
     
-   
     
     public ViewCard(String cardString) {
         String[] parts = cardString.split(",");

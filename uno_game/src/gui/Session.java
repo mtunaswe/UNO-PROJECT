@@ -33,7 +33,7 @@ public class Session extends JPanel {
     private static final long serialVersionUID = 1L;
     private List<JPanel> playerPanels; // General JPanel to handle both PlayerPanel and CPUPanel
     private TablePanel table;
-    private static Game game;
+    private Game game;
     private JTextArea eventLog;
     private JButton saveLogButton;
     private JButton saveGameButton;
@@ -90,8 +90,8 @@ public class Session extends JPanel {
         saveGameButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String username = "mert"; // Replace with actual method to get username
-                String sessionName = MainMenu.getGameController().getSessionName(); // Replace with actual method to get session name
+                String username = UserSession.getCurrentUser().getNickname(); 
+                String sessionName = game.getSessionName(); 
                 String fileName = username + "_" + sessionName + ".txt";
 
                 File saveDirectory = new File("saved_games");
@@ -102,7 +102,7 @@ public class Session extends JPanel {
                 File saveFile = new File(saveDirectory, fileName);
                 String filePath = saveFile.getPath();
 
-                MainMenu.getGameController().saveGame(filePath);
+                game.saveGame(filePath);
                 JOptionPane.showMessageDialog(Session.this, "Game saved successfully!");
                 
                 closeGameWindow();

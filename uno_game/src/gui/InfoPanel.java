@@ -5,7 +5,15 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.FontMetrics;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
+
+import game_model.Game.Direction;
 
 /**
  * InfoPanel is a custom JPanel that displays game information such as error messages,
@@ -15,11 +23,14 @@ public class InfoPanel extends JPanel {
     private static final long serialVersionUID = 1L;
     private String error;
     private String text;
-    private String directionText;
     private String sessionName;
     private int panelCenter;
     private int rest = 0;
 	private int score;
+	private Direction direction;
+	
+	private BufferedImage clockwiseArrow;
+    private Image counterClockwiseArrow;
 
 
     /**
@@ -31,12 +42,47 @@ public class InfoPanel extends JPanel {
         
         error = "";
         text = "Game Started";
-        directionText = "Clockwise";
+      
         sessionName = "";
         
+        direction = Direction.Clockwise;
+        
+        
+        loadImages();
         updateText(text);
-        updateDirection(directionText);
+        updateDirection(direction);
 
+    }
+    
+    /**
+     * Loads the images for the arrows indicating direction.
+     */
+    
+   
+    private void loadImages() {
+        try {
+            clockwiseArrow = ImageIO.read(getClass().getResource("/resources/arrow.png"));    
+            counterClockwiseArrow = getFlippedImage(clockwiseArrow);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Flips an image horizontally.
+     * @param image The image to be flipped.
+     * @return The flipped image.
+     */
+    
+
+    private BufferedImage getFlippedImage(BufferedImage image) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        BufferedImage flippedImage = new BufferedImage(width, height, image.getType());
+        Graphics2D g2d = flippedImage.createGraphics();
+        g2d.drawImage(image, 0, 0, width, height, width, 0, 0, height, null);
+        g2d.dispose();
+        return flippedImage;
     }
 
     /**
@@ -52,8 +98,8 @@ public class InfoPanel extends JPanel {
         printCPUScore(g);
         printError(g);
         printRemaining(g);
-        printDirection(g);
         printSessionName(g);
+        paintDirection(g);
         
     }
     
@@ -61,9 +107,10 @@ public class InfoPanel extends JPanel {
         if (!sessionName.isEmpty()) {
             Font adjustedFont = new Font("Cabin", Font.BOLD, 20);
             FontMetrics fm = this.getFontMetrics(adjustedFont);
-            g.setColor(new Color(0, 0, 0));
-            int xPos = panelCenter - fm.stringWidth(sessionName) / 2;
-            g.drawString("Session: " + sessionName, xPos, 20);
+            g.setColor(Color.BLUE);
+            String sessionNameText = "Session: " + sessionName;
+            int xPos = panelCenter - fm.stringWidth(sessionNameText) / 2;
+            g.drawString(sessionNameText, xPos, 15);
         }
     }
 
@@ -80,7 +127,7 @@ public class InfoPanel extends JPanel {
             FontMetrics fm = this.getFontMetrics(adjustedFont);
             int xPos = panelCenter - fm.stringWidth(error) / 2;
             g.setFont(adjustedFont);
-            g.setColor(Color.red);
+            g.setColor(Color.RED);
             g.drawString(error, xPos, 35);
             
             error = ""; 
@@ -109,9 +156,20 @@ public class InfoPanel extends JPanel {
     private void printCPUScore(Graphics g) {
         Font adjustedFont = new Font("Cabin", Font.BOLD, 25);
         FontMetrics fm = this.getFontMetrics(adjustedFont);
-        g.setColor(new Color(127, 127, 127));
+        g.setColor(Color.MAGENTA);
+        
+        String cpuScoreText;
+        
+        if(score != 0) {
+        	cpuScoreText = "CPU Total Score: " + score;
+        	
+        }
+        
+        else {
+        	cpuScoreText = "";
+        }
 
-        String cpuScoreText = "CPU Total Score: " + score;
+        
         int xPos = panelCenter - fm.stringWidth(cpuScoreText) / 2;
 
         g.setFont(adjustedFont);
@@ -126,7 +184,7 @@ public class InfoPanel extends JPanel {
     private void printRemaining(Graphics g) {
     	Font adjustedFont = new Font("Calibri", Font.BOLD,	25);	
 		FontMetrics fm = this.getFontMetrics(adjustedFont);
-		g.setColor(new Color(127,127,127));
+		g.setColor(Color.ORANGE);
 		
 		//Determine the width of the word to position
 	
@@ -140,19 +198,22 @@ public class InfoPanel extends JPanel {
 		
 		
 	}
-
+    
     /**
      * Prints the current direction of play in the middle of the panel.
-     * 
-     * @param g the Graphics object used for painting
+     * @param g The Graphics object used for painting.
      */
-    private void printDirection(Graphics g) {
-        Font adjustedFont = new Font("Cabin", Font.BOLD, 20);
-        FontMetrics fm = this.getFontMetrics(adjustedFont);
-        g.setColor(new Color(0, 0, 0));
-        int xPos = panelCenter - fm.stringWidth(directionText) / 2;
-        g.drawString(directionText, xPos, 140);
+    private void paintDirection(Graphics g) {
+        Image arrow = (direction == Direction.Clockwise) ? clockwiseArrow : counterClockwiseArrow;
+        if (arrow != null) {
+            int arrowWidth = 50; // adjust as needed
+            int arrowHeight = 50; // adjust as needed
+            int xPos = panelCenter - arrowWidth / 2;
+            int yPos = 110;
+            g.drawImage(arrow, xPos, yPos, arrowWidth, arrowHeight, null);
+        }
     }
+
 
     /**
      * Updates the main status message and repaints the panel.
@@ -169,8 +230,9 @@ public class InfoPanel extends JPanel {
      * 
      * @param newDirection the new direction of play
      */
-    public void updateDirection(String newDirection) {
-        directionText = "Direction: " + newDirection;
+    public void updateDirection(Direction newDirection) {
+    	direction = newDirection; 
+        repaint();
        
     }
 

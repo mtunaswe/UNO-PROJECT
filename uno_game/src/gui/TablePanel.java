@@ -100,7 +100,7 @@ public class TablePanel extends JPanel implements Constants {
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 1;
         c.gridy = 1;
-        c.insets = new Insets(-175, -390, 10, 10); // Adjust the position and spacing as needed
+        c.insets = new Insets(-175, -400, 10, 10); 
         add(createDeckPanel(), c);
     }
 
@@ -132,18 +132,15 @@ public class TablePanel extends JPanel implements Constants {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                if (backImage != null) {
-                    int offset = 2; // Small offset for each card
-                    int numberOfCards = 10; // Number of cards to display
-                    for (int i = 0; i < numberOfCards; i++) {
-                        g2.drawImage(backImage, i + offset, 0, getWidth(), getHeight(), this);
-                    }
-                } 
                 
+                if (backImage != null) {
+                	g2.drawImage(backImage, 0, 0, getWidth(), getHeight(), this);
+                }
+                     
             }
         };
         
-        deckPanel.setPreferredSize(new Dimension(100, 150)); // Set the size of the deck panel
+        deckPanel.setPreferredSize(new Dimension(100, 150)); 
         deckPanel.setOpaque(false);
         return deckPanel;
     }

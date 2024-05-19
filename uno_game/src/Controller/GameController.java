@@ -1,8 +1,5 @@
 package Controller;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Stack;
 import javax.swing.JOptionPane;
 
@@ -11,12 +8,12 @@ import game_model.CPUPlayer;
 import game_model.DealerShuffler;
 import game_model.Game;
 import game_model.Player;
+import game_model.UserSession;
 import gui.ViewCard;
 
 public class GameController implements Constants{
     private Game game;
-	private String sessionName;
-    
+
     /**
      * Constructs a GameController for the specified game.
      *
@@ -26,8 +23,7 @@ public class GameController implements Constants{
     	game = new Game();
     
     }
-    
-   
+
 	/**
      * Sets up the game by initializing players, shuffling and distributing cards,
      * and setting the initial game state.
@@ -40,16 +36,23 @@ public class GameController implements Constants{
         if (playerCount == 0) {
             return; 
         }
+        
+        String sessionName = JOptionPane.showInputDialog("Enter session name: ");
+        if (sessionName == null) {
+        	return;
+        }
+
+        game.setSessionName(sessionName);
 
         Player[] players = new Player[playerCount];
         
         // Create players
         // First player is a human player
-        setSessionName(JOptionPane.showInputDialog("Enter session name: "));
         
-        players[0] = new Player("session");
+        
+        players[0] = new Player(UserSession.getCurrentUser().getNickname());
         //players[0] = new Player(UserSession.getCurrentUser().getNickname());
-        infoPanel.setSessionName(getSessionName());
+        
 
         // The rest are CPU players
         for (int i = 1; i < playerCount; i++) {
@@ -68,7 +71,7 @@ public class GameController implements Constants{
         game.setDirection(Game.Direction.Clockwise);
         
         
-        System.out.println(players[0].getAllCards());
+       
     }
     
     /**
@@ -101,45 +104,7 @@ public class GameController implements Constants{
 	    }
 	}
     
-    public void saveGame(String filePath) {
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-            // Save players
-            for (Player player : game.getPlayers()) {
-                writer.write(player.getName());
-                writer.newLine();
-            }
-
-            // Save current player index
-            writer.write("CurrentPlayerIndex:" + 0);
-            writer.newLine();
-
-            // Save direction
-            writer.write("Direction:" + game.getDirection().name());
-            writer.newLine();
-            
-            // Save user hand and CPU hand sizes
-            for (Player player : game.getPlayers()) {
-                if (player instanceof CPUPlayer) {
-                    writer.write("CPUHand:");
-                    for (ViewCard card : player.getAllCards()) {
-                        writer.write(card.getColorName() + "," + card.getType() + "," + card.getCardValue() +";");
-                    }
-                } else {
-                    writer.write("UserHand:");
-                    for (ViewCard card : player.getAllCards()) {
-                        writer.write(card.getColorName() + "," + card.getType() + "," + card.getCardValue() +";");
-                    }
-                }
-                writer.newLine();
-            }
-                    
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            
-            JOptionPane.showMessageDialog(null, "Error saving game: " + e.getMessage());
-        }
-    }
+    
     
     public Game getGame() {
 		return game;
@@ -150,13 +115,7 @@ public class GameController implements Constants{
 	}
 
 
-	public String getSessionName() {
-		return sessionName;
-	}
-
-	public void setSessionName(String sessionName) {
-		this.sessionName = sessionName;
-	}
+	
 }
     
 

@@ -71,6 +71,10 @@ public class PlayerPanel extends JPanel {
      */
     public void setCards() {
         cardHolder.removeAll();
+        
+        Dimension size = cardHolder.getPreferredSize();
+        cardHolder.setSize(size);
+        cardHolder.setPreferredSize(size);
 
         // Origin point at the center
         Point origin = getPoint(cardHolder.getWidth(), player.getTotalCards());

@@ -24,7 +24,6 @@ import game_model.UserSession;
 
 
 public class MainMenu {
-	static GameController gameController;
 
 	
 	JFrame frame;
@@ -66,7 +65,7 @@ public class MainMenu {
 		btnNewButton.setFont(new Font("Cabin", Font.PLAIN, 15));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				gameController = new GameController();
+				GameController gameController = new GameController();
 				gameController.setupGame();
 				
 				MainFrame mainframe = new MainFrame(gameController.getGame());
@@ -81,7 +80,10 @@ public class MainMenu {
 		btnSavedGames.setFont(new Font("Cabin", Font.PLAIN, 15));
 		btnSavedGames.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
-		        String username = "mert"; 
+		    	
+		    	
+		    	
+		        String username = UserSession.getCurrentUser().getNickname(); 
 		        JFileChooser fileChooser = new JFileChooser("saved_games");
 
 		        // Custom file filter
@@ -104,18 +106,14 @@ public class MainMenu {
 		        int option = fileChooser.showOpenDialog(frame);
 		        if (option == JFileChooser.APPROVE_OPTION) {
 		            String filePath = fileChooser.getSelectedFile().getPath();
-		            File selectedFile = fileChooser.getSelectedFile();
+		                     
+		            LoadGameController loadController = new LoadGameController();
+	                loadController.loadGame(filePath);
 
-		            // Additional check to ensure the file is allowed
-		            if (selectedFile.getName().startsWith(username) && selectedFile.getName().endsWith(".txt")) {
-		                LoadGameController loadController = new LoadGameController();
-		                loadController.loadGame(filePath);
-
-		                MainFrame mainframe = new MainFrame(loadController.getGame());
-		                mainframe.setVisible(true);
-		            } else {
-		                JOptionPane.showMessageDialog(frame, "You are not allowed to open this file.", "Error", JOptionPane.ERROR_MESSAGE);
-		            }
+	                MainFrame mainframe = new MainFrame(loadController.getGame());
+	                mainframe.setVisible(true);
+          
+		           
 		        }
 		    }
 		});
@@ -169,15 +167,6 @@ public class MainMenu {
 		frame.getContentPane().add(btnNewButton_3_1);
 	}
 	
-	public static GameController getGameController() {
-		return gameController;
-	}
-
-	@SuppressWarnings("static-access")
-	public void setGameController(GameController gameController) {
-		this.gameController = gameController;
-	}
-		
 
 
 }
