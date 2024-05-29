@@ -1,8 +1,9 @@
 mert, mert1234_, 1, 1, 150, 2
 cago, cago_!123, 1, 3, 162, 4
 baldeniz, denom_12345, 6, 7, 561, 13
-onur, apcag!123, 2, 5, 302, 7
+onur, apcag!123, 2, 6, 302, 8
 baho, bahadır_swinger33, 1, 4, 270, 5
 mengu, penguin_2002, 3, 6, 508, 9
 tahaekim, taha_ekim123456, 2, 1, 137, 3
-plutoc, lol123_lol123, 14, 12, 838, 26
+plutoc, lol123_lol123, 15, 15, 870, 30
+theBest, finalcomp_132, 1, 2, 77, 3

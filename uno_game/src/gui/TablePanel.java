@@ -56,7 +56,7 @@ public class TablePanel extends JPanel implements Constants {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        // Draw the background image at full panel size
+
         if (backgroundImage != null) {
             g.drawImage(backgroundImage, 0, 0, getWidth(), getHeight(), this);
         }
@@ -95,7 +95,7 @@ public class TablePanel extends JPanel implements Constants {
         c.insets = new Insets(0, 1, 0, 1);
         add(infoPanel, c);
 
-        // Adding the deck panel
+   
         c.fill = GridBagConstraints.NONE;
         c.anchor = GridBagConstraints.LINE_START;
         c.gridx = 1;

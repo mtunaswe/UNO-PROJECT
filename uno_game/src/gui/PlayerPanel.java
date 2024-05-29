@@ -3,14 +3,20 @@ package gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Point;
+import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import javax.swing.AbstractButton;
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
+import javax.swing.plaf.basic.BasicButtonUI;
 import Controller.ButtonListener;
 import game_model.Player;
 
@@ -41,23 +47,22 @@ public class PlayerPanel extends JPanel {
      */
     public PlayerPanel(Player newPlayer) {
         setPlayer(newPlayer);
-        setBackground(new Color(216, 191, 168)); // Set background color to match the table
+        setBackground(new Color(216, 191, 168)); 
 
         layout = Box.createVerticalBox();
         cardHolder = new JLayeredPane();
         cardHolder.setPreferredSize(new Dimension(600, 175));
-        cardHolder.setBackground(new Color(216, 191, 168)); // Set background color
+        cardHolder.setBackground(new Color(216, 191, 168)); 
 
         // Set cards and control panel
         setCards();
         setControlPanel();
 
         layout.add(cardHolder);
-        layout.add(Box.createVerticalStrut(10)); // Add some spacing between card holder and control panel
+        layout.add(Box.createVerticalStrut(10)); 
         layout.add(controlPanel);
         add(layout);
 
-        // Register Listeners
         handler = new ButtonHandler();
         draw.addActionListener(BUTTONLISTENER);
         draw.addActionListener(handler);
@@ -76,7 +81,6 @@ public class PlayerPanel extends JPanel {
         cardHolder.setSize(size);
         cardHolder.setPreferredSize(size);
 
-        // Origin point at the center
         Point origin = getPoint(cardHolder.getWidth(), player.getTotalCards());
         int offset = calculateOffset(cardHolder.getWidth(), player.getTotalCards());
 
@@ -123,23 +127,28 @@ public class PlayerPanel extends JPanel {
      */
     private void setControlPanel() {
         draw = new JButton("Draw");
-        draw.setBackground(new Color(160, 82, 45));
+        draw.setUI(new ModernButtonUI());
+        draw.setBackground(new Color(255, 87, 34));
         draw.setFont(new Font("Cabin", Font.BOLD, 20));
+        draw.setForeground(Color.WHITE);
         draw.setFocusable(false);
+        draw.setPreferredSize(new Dimension(120, 50));
         
         sayUNO = new JButton("Say UNO");
-        sayUNO.setBackground(new Color(210, 180, 140));
+        sayUNO.setUI(new ModernButtonUI());
+        sayUNO.setBackground(new Color(76, 175, 80));
         sayUNO.setFont(new Font("Cabin", Font.BOLD, 20));
+        sayUNO.setForeground(Color.WHITE);
         sayUNO.setFocusable(false);
+        sayUNO.setPreferredSize(new Dimension(120, 50));
         
         nameLbl = new JLabel(name);
         nameLbl.setForeground(Color.BLACK);
         nameLbl.setFont(new Font("Cabin", Font.BOLD, 15));
 
         controlPanel = Box.createHorizontalBox();
-        controlPanel.setBackground(new Color(205, 133, 63)); // Set background color
         controlPanel.add(nameLbl);
-        controlPanel.add(Box.createHorizontalStrut(10)); // Add some spacing between the name label and buttons
+        controlPanel.add(Box.createHorizontalStrut(10));
         controlPanel.add(draw);
         controlPanel.add(Box.createHorizontalStrut(15));
         controlPanel.add(sayUNO);
@@ -191,6 +200,35 @@ public class PlayerPanel extends JPanel {
                     BUTTONLISTENER.sayUNO();
                 }
             }
+        }
+    }
+
+    /**
+     * Custom button UI for modern styling.
+     */
+    private static class ModernButtonUI extends BasicButtonUI {
+        @Override
+        public void paint(Graphics g, JComponent c) {
+            AbstractButton b = (AbstractButton) c;
+            paintBackground(g, b, b.getModel().isPressed() ? 2 : 0);
+            super.paint(g, c);
+        }
+
+        private void paintBackground(Graphics g, JComponent c, int yOffset) {
+            Graphics2D g2 = (Graphics2D) g.create();
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
+            int width = c.getWidth();
+            int height = c.getHeight();
+            Color color = c.getBackground();
+
+            g2.setColor(color);
+            g2.fillRoundRect(0, yOffset, width, height - yOffset, 20, 20);
+
+            g2.setColor(color.darker());
+            g2.drawRoundRect(0, yOffset, width, height - yOffset, 20, 20);
+
+            g2.dispose();
         }
     }
 }

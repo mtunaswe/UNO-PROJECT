@@ -1,5 +1,6 @@
 package gui;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
@@ -7,9 +8,12 @@ import java.awt.FontMetrics;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.LinearGradientPaint;
+import java.awt.RenderingHints;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
+import java.awt.geom.RoundRectangle2D;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,12 +25,7 @@ import javax.swing.border.Border;
 
 import Interfaces.Constants;
 
-/**
- * The ViewCard class represents a visual component for displaying a card in a card game.
- * It extends JPanel and includes functionality to display the front and back of the card,
- * with various card details such as color, type, and value.
- */
-public class ViewCard extends JPanel implements Constants{
+public class ViewCard extends JPanel implements Constants {
 
     private static final long serialVersionUID = 1L;
 
@@ -65,16 +64,9 @@ public class ViewCard extends JPanel implements Constants{
         colorMap.put(BLACK, "Wild Card");
     }
 
-
-    /**
-     * Constructor for creating a ViewCard for CPUPanel.
-     * This constructor initializes the card with default settings and loads the card images.
-     */
-    
-    
     public ViewCard(String cardString) {
         String[] parts = cardString.split(",");
-        this.cardColor = getKeyByValue(colorMap,parts[0]);
+        this.cardColor = getKeyByValue(colorMap, parts[0]);
         this.type = Integer.parseInt(parts[1]);
         this.value = parts[2];
         
@@ -85,10 +77,6 @@ public class ViewCard extends JPanel implements Constants{
         loadImages();
     }
     
-    /* *
-     * Helper method to get the key by value on HashMap
-     * 
-     */
     public static <K, V> K getKeyByValue(Map<K, V> map, V value) {
         for (Map.Entry<K, V> entry : map.entrySet()) {
             if (entry.getValue().equals(value)) {
@@ -105,13 +93,6 @@ public class ViewCard extends JPanel implements Constants{
         loadImages();
     }
 
-    /**
-     * Constructor for creating a ViewCard for PlayerPanel with specific color, type, and value.
-     * 
-     * @param cardColor The color of the card.
-     * @param cardType  The type of the card (NUMBERS, ACTION, WILD).
-     * @param cardValue The value of the card.
-     */
     public ViewCard(Color cardColor, int cardType, String cardValue) {
         this.cardColor = cardColor;
         this.type = cardType;
@@ -124,9 +105,6 @@ public class ViewCard extends JPanel implements Constants{
         loadImages();
     }
 
-    /**
-     * Loads the images for the card's back, skip, and reverse icons.
-     */
     private void loadImages() {
         try {
             backImage = ImageIO.read(getClass().getResource("/resources/uno_back_card.png"));
@@ -151,27 +129,28 @@ public class ViewCard extends JPanel implements Constants{
         }
     }
 
-    /**
-     * Displays the front of the card with its details.
-     * 
-     * @param g The Graphics object for rendering.
-     */
     private void displayFront(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
-        g2.setColor(Color.WHITE);
-        g2.fillRect(0, 0, cardWidth, cardHeight);
+        Color gradientStart = cardColor.brighter();
+        Color gradientEnd = cardColor.darker();
+        LinearGradientPaint gradient = new LinearGradientPaint(0, 0, 0, cardHeight, new float[]{0f, 1f}, new Color[]{gradientStart, gradientEnd});
+        g2.setPaint(gradient);
 
-        int margin = 5;
-        g2.setColor(cardColor);
-        g2.fillRect(margin, margin, cardWidth - 2 * margin, cardHeight - 2 * margin);
+        RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, cardWidth, cardHeight, 20, 20);
+        g2.fill(roundedRectangle);
 
+ 
         g2.setColor(Color.WHITE);
         AffineTransform org = g2.getTransform();
-        g2.rotate(45, cardWidth * 3 / 4, cardHeight * 3 / 4);
-
+        g2.rotate(Math.toRadians(45), cardWidth * 3 / 4, cardHeight * 3 / 4);
         g2.fillOval(0, cardHeight * 1 / 4, cardWidth * 3 / 5, cardHeight);
         g2.setTransform(org);
+
+        g2.setColor(Color.WHITE);
+        g2.setStroke(new BasicStroke(2));
+        g2.draw(roundedRectangle);
 
         if (value != null) {
             Image imageToDraw = null;
@@ -189,8 +168,8 @@ public class ViewCard extends JPanel implements Constants{
 
                 // Draw small icons in the corners
                 int smallImgSize = 20;
-                g2.drawImage(imageToDraw, margin, margin, smallImgSize, smallImgSize, this); // top-left
-                g2.drawImage(imageToDraw, cardWidth - margin - smallImgSize, cardHeight - margin - smallImgSize, smallImgSize, smallImgSize, this); // bottom-right
+                g2.drawImage(imageToDraw, 5, 5, smallImgSize, smallImgSize, this); // top-left
+                g2.drawImage(imageToDraw, cardWidth - 5 - smallImgSize, cardHeight - 5 - smallImgSize, smallImgSize, smallImgSize, this); // bottom-right
             } else {
                 // Value in the center
                 Font defaultFont = new Font("Cabin", Font.BOLD, cardWidth / 2 + 5);
@@ -208,31 +187,26 @@ public class ViewCard extends JPanel implements Constants{
                 stringWidth = fm.stringWidth(value) / 2;
                 fontHeight = defaultFont.getSize() * 1 / 3;
 
-                g2.setColor(Color.white);
+                g2.setColor(Color.WHITE);
                 g2.setFont(defaultFont);
-                g2.drawString(value, 2 * margin, 5 * margin);
+                g2.drawString(value, 2 * 5, 5 * 5);
 
                 // Value in the bottom-right corner
-                stringWidth = fm.stringWidth(value) / 2;
-                fontHeight = defaultFont.getSize() * 1 / 3;
-
-                g2.drawString(value, cardWidth - 2 * margin - fm.stringWidth(value), cardHeight - 2 * margin);
+                g2.drawString(value, cardWidth - 2 * 5 - fm.stringWidth(value), cardHeight - 2 * 5);
             }
         }
     }
 
-    /**
-     * Displays the back of the card.
-     * 
-     * @param g The Graphics object for rendering.
-     */
     void displayBack(Graphics g) {
         Graphics2D g2 = (Graphics2D) g;
+        g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+
         if (backImage != null) {
             g2.drawImage(backImage, 0, 0, getWidth(), getHeight(), this);
         } else {
             g2.setColor(Color.GRAY);
-            g2.fillRect(0, 0, cardWidth, cardHeight);
+            RoundRectangle2D roundedRectangle = new RoundRectangle2D.Float(0, 0, cardWidth, cardHeight, 20, 20);
+            g2.fill(roundedRectangle);
 
             g2.setColor(Color.BLACK);
             Font largeFont = new Font("Cabin", Font.BOLD, 36);
@@ -250,17 +224,11 @@ public class ViewCard extends JPanel implements Constants{
         }
     }
 
-    /**
-     * Toggles the visibility of the card's face (front or back).
-     */
     public void toggleCardFace() {
         showFront = !showFront;
         repaint();
     }
 
-    /**
-     * Mouse listener for handling mouse events on the card.
-     */
     class MouseHandler extends MouseAdapter {
         public void mouseEntered(MouseEvent e) {
             setBorder(focusedBorder);
@@ -271,76 +239,35 @@ public class ViewCard extends JPanel implements Constants{
         }
     }
 
-    /**
-     * Sets the size of the card.
-     * 
-     * @param newSize The new size for the card.
-     */
     public void setCardSize(Dimension newSize) {
         this.setPreferredSize(newSize);
     }
 
-    /**
-     * Sets the color of the card.
-     * 
-     * @param newColor The new color for the card.
-     */
     public void setColor(Color newColor) {
         this.cardColor = newColor;
     }
 
-    /**
-     * Gets the color of the card.
-     * 
-     * @return The color of the card.
-     */
     public Color getColor() {
         return cardColor;
     }
 
-    /**
-     * Sets the value of the card.
-     * 
-     * @param newValue The new value for the card.
-     */
     public void setCardValue(String newValue) {
         this.value = newValue;
     }
 
-    /**
-     * Gets the value of the card.
-     * 
-     * @return The value of the card.
-     */
     public String getCardValue() {
         return value;
     }
 
-    /**
-     * Sets the type of the card.
-     * 
-     * @param newType The new type for the card.
-     */
     public void setType(int newType) {
         this.type = newType;
     }
 
-    /**
-     * Gets the type of the card.
-     * 
-     * @return The type of the card.
-     */
     public int getType() {
         return type;
     }
-    
-    /**
-     * Gets the name of the card's color.
-     * 
-     * @return The name of the card's color.
-     */
+
     public String getColorName() {
         return colorMap.getOrDefault(cardColor, "Wild Card");
     }
-     
 }

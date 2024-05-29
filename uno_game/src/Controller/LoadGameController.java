@@ -95,7 +95,8 @@ public class LoadGameController implements Constants {
 
                 } else if (line.startsWith("CurrentPlayerIndex:")) {
                     game.setCurrentPlayerIndex(Integer.parseInt(line.split(":")[1]));
-
+                    
+                    
                 } else if (line.startsWith("Direction:")) {
                     game.setDirection(Game.Direction.valueOf(line.split(":")[1]));
 
@@ -151,12 +152,8 @@ public class LoadGameController implements Constants {
 
             players[0].setCards(userHand);
             
-            Player playerStart = players[game.getCurrentPlayerIndex()];
-            if(playerStart instanceof CPUPlayer){
-            	game.setCpu((CPUPlayer) playerStart);
-            }
-            playerStart.toggleTurn();
-
+            setNextCPUPlayer();
+            
             for (int i = 0; i < cpusHand.size(); i++) {
                 players[i + 1].setCards(cpusHand.get(i));
             }
@@ -165,6 +162,25 @@ public class LoadGameController implements Constants {
             e.printStackTrace();
         }
     }
+    
+    /**
+     * Sets the next CPU player based on the current player index and the game direction.
+     */
+    private void setNextCPUPlayer() {
+        int currentPlayerIndex = game.getCurrentPlayerIndex();
+        Player currentPlayer = game.getPlayers()[currentPlayerIndex];
+        
+        if (currentPlayerIndex == 0) {
+            int nextPlayerIndex = (game.getDirection() == Game.Direction.Clockwise)
+                ? currentPlayerIndex + 1
+                : game.getPlayers().length - 1;
+            game.setCpu((CPUPlayer) game.getPlayers()[nextPlayerIndex]);
+        } else {
+            game.setCpu((CPUPlayer) currentPlayer);
+        }
+        currentPlayer.toggleTurn();
+    }
+
 
     /**
      * Creates a ViewCard object from a string representation of the card.

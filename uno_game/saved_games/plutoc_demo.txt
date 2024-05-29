@@ -1,0 +1,11 @@
+SessionName:demo
+plutoc
+CPU 1
+CPU 2
+CurrentPlayerIndex:0
+Direction:Clockwise
+UserHand:Yellow,1,3;Yellow,1,4;
+CPUHand:Green,1,8;Yellow,2,Reverse;Green,1,0;Green,2,2+;Yellow,1,4;Green,2,Reverse;Blue,1,0;Red,1,1;
+CPUHand:Green,1,3;Red,1,4;Green,2,Reverse;Red,1,2;Green,1,5;Red,1,1;Yellow,1,1;
+Deck:Wild Card,3,4+;Green,1,7;Green,1,8;Red,2,Skip;Yellow,1,8;Yellow,1,7;Wild Card,3,4+;Blue,1,5;Red,1,5;Red,1,3;Green,1,6;Red,1,8;Yellow,1,5;Red,1,8;Red,1,3;Yellow,1,7;Red,1,5;Green,2,Skip;Yellow,2,Skip;Red,1,6;Green,1,4;Yellow,1,1;Red,2,Skip;Blue,2,2+;Blue,2,Skip;Yellow,2,Skip;Wild Card,3,W;Yellow,1,8;Green,2,Skip;Blue,1,3;Blue,1,7;Green,1,6;Yellow,1,9;Blue,2,Reverse;Blue,1,4;Red,2,2+;Green,1,1;Yellow,1,3;Blue,1,2;Wild Card,3,W;Red,2,2+;Yellow,1,0;Wild Card,3,4+;Green,1,7;Yellow,1,9;Red,1,6;Red,1,7;Green,1,4;Yellow,1,5;Yellow,1,6;Yellow,1,2;Wild Card,3,W;Blue,1,9;Green,1,3;Yellow,1,2;Blue,1,1;Yellow,2,2+;Red,2,Reverse;Red,1,7;Green,1,1;Red,1,0;Green,1,2;Green,1,2;Red,1,9;Yellow,2,Reverse;Red,1,2;Red,1,9;Blue,2,Reverse;Green,1,5;
+LastCardPlayed:Blue,1,9

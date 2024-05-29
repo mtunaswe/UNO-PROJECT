@@ -1,7 +1,0 @@
-SessionName:null
-plutoc
-CPU 1
-CurrentPlayerIndex:0
-Direction:Clockwise
-UserHand:Yellow,1,1;Yellow,2,Reverse;Wild Card,3,W;
-CPUHand:Red,1,4;Yellow,1,9;Green,2,Reverse;Green,2,2+;Yellow,1,2;Green,2,Reverse;Green,1,2;Red,2,Reverse;

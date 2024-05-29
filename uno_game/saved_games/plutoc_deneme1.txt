@@ -1,7 +1,0 @@
-SessionName:deneme1
-plutoc
-CPU 1
-CurrentPlayerIndex:0
-Direction:Counter_Clockwise
-UserHand:Green,1,1;
-CPUHand:Blue,2,Reverse;Yellow,2,2+;

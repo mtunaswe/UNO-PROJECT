@@ -54,7 +54,6 @@ public class ResultWindow extends JFrame {
         resultPanel.add(scrollPane, BorderLayout.CENTER);
         resultPanel.add(buttonPanel, BorderLayout.SOUTH);
 
-        // Add game result information with condition
         JTextArea resultTextArea;
         if (totalScore == 0 && winnerName.contains("CPU")) {
             resultTextArea = new JTextArea("Winner: " + winnerName + "\nWinner is the CPU");
@@ -73,7 +72,6 @@ public class ResultWindow extends JFrame {
      * The file is automatically named using the session name and the current timestamp.
      */
     private void saveLogToFile(String sessionName) {
-        // Ensure the "logs" directory exists
         File logDirectory = new File("logs");
         if (!logDirectory.exists()) {
             logDirectory.mkdir();

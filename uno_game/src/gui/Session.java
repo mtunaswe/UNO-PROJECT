@@ -47,7 +47,7 @@ public class Session extends JPanel {
      */
     public Session(Game newGame, ViewCard firstCard) {
         setPreferredSize(new Dimension(960, 720));
-        setBackground(new Color(216, 191, 168)); // Updated to match table's color
+        setBackground(new Color(216, 191, 168));
 
         game = newGame;
 
@@ -68,7 +68,7 @@ public class Session extends JPanel {
         // Distribute CPU panels
         distributeCPUPanels(eastCpuArea, westCpuArea, northCpuArea);
 
-        // Applying a border to ensure panels do not touch edges
+
         eastCpuArea.setBorder(new EmptyBorder(10, 10, 10, 10));
         westCpuArea.setBorder(new EmptyBorder(10, 10, 10, 10));
         northCpuArea.setBorder(new EmptyBorder(10, 10, 10, 10));
@@ -78,7 +78,6 @@ public class Session extends JPanel {
         JScrollPane scrollPane = new JScrollPane(eventLog);
         scrollPane.setPreferredSize(new Dimension(300, 100));
 
-        // Add the save log button
         saveLogButton = new JButton("Save Log");
         saveLogButton.addActionListener(new ActionListener() {
             @Override
@@ -227,7 +226,6 @@ public class Session extends JPanel {
      * The file is automatically named using the session name and the current timestamp.
      */
     private void saveLogToFile() {
-        // Ensure the "logs" directory exists
         File logDirectory = new File("logs");
         if (!logDirectory.exists()) {
             logDirectory.mkdir();
@@ -247,8 +245,7 @@ public class Session extends JPanel {
         }
     }
 
-    
-    
+ 
 
     @Override
     protected void paintComponent(Graphics g) {
