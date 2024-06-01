@@ -63,6 +63,7 @@ public class GameController implements Constants{
 
         // Set players in the game
         game.setPlayers(players);
+        game.setCpu((CPUPlayer) game.getPlayers()[1]);
         game.setDealer(new DealerShuffler());
         Stack<ViewCard> cardStack = game.getDealer().shuffle();
         game.setCardStack(cardStack);

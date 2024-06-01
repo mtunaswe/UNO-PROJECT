@@ -12,7 +12,6 @@ SIGNATURE: <Mert Tuna, 80363>
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
-
 import gui.LoginPage;
 
 public class Main {

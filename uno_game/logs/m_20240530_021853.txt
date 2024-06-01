@@ -1,0 +1,14 @@
+Welcome to UNO Game!
+theBest played Wild Card 4+ and chose Red color
+theBest played Red 2+
+theBest played Red Reverse
+theBest played Red 4
+CPU 1 played Green 4
+theBest played Blue 4
+CPU 1 played Blue Skip
+CPU 1 played Blue Reverse
+CPU 1 played Blue Skip
+CPU 1 played Blue 8
+theBest played Blue 1
+theBest won the UNO game!!! 
+Total Score of theBest is 77

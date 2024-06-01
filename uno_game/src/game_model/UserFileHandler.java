@@ -43,6 +43,7 @@ public class UserFileHandler {
                 writer.write(String.join(", ", details));
                 writer.newLine();
             }
+            writer.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

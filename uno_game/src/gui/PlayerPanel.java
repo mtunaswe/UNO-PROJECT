@@ -17,14 +17,14 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JPanel;
 import javax.swing.plaf.basic.BasicButtonUI;
-import Controller.ButtonListener;
+import Interfaces.Constants;
 import game_model.Player;
 
 /**
  * The PlayerPanel class represents the panel for the human player, 
  * displaying the player's cards and control buttons (Draw and Say UNO).
  */
-public class PlayerPanel extends JPanel {
+public class PlayerPanel extends JPanel implements Constants{
     private static final long serialVersionUID = 1L;
     private Player player;
     private String name;
@@ -38,7 +38,6 @@ public class PlayerPanel extends JPanel {
     private JLabel nameLbl;
     private ButtonHandler handler;
     
-    private ButtonListener BUTTONLISTENER = new ButtonListener();
 
     /**
      * Constructs a PlayerPanel for the given player.

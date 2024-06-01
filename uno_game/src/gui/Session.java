@@ -247,7 +247,15 @@ public class Session extends JPanel {
 
  
 
-    @Override
+    public TablePanel getTable() {
+		return table;
+	}
+
+	public void setTable(TablePanel table) {
+		this.table = table;
+	}
+
+	@Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
     }

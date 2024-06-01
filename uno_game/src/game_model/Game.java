@@ -42,6 +42,7 @@ public class Game implements Constants {
      */
     public Game() {
         isOver = false;
+         
     }
     
     /**

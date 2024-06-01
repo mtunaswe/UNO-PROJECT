@@ -4,6 +4,7 @@ import java.awt.event.MouseEvent;
 import java.util.Random;
 import javax.swing.SwingUtilities;
 
+import Interfaces.Constants;
 import card_model.WildCard;
 
 import gui.ViewCard;
@@ -13,7 +14,7 @@ import gui.ViewCard;
  * It extends the Player class and provides specific functionality for the CPU player,
  * including card playing logic and probability-based actions.
  */
-public class CPUPlayer extends Player {
+public class CPUPlayer extends Player implements Constants{
     
     private Random random = new Random();  // Random object for probability checks
     private static final double UNO_PROBABILITY = 0.8;  // 80% chance for CPU to remember to say Uno
@@ -46,6 +47,7 @@ public class CPUPlayer extends Player {
      */
     public boolean play(ViewCard topCard) {
         boolean done = false;
+        randomlySayUno();
         
         for (ViewCard card : getAllCards()) {
             if (!(card instanceof WildCard)) {
@@ -69,8 +71,7 @@ public class CPUPlayer extends Player {
                 }
             }
         }
-
-        randomlySayUno();
+        
         return done;
     }
     
@@ -80,7 +81,7 @@ public class CPUPlayer extends Player {
     private void randomlySayUno() {
         if (getTotalCards() == 1 || getTotalCards() == 2) {
             if (random.nextDouble() < UNO_PROBABILITY) {
-                saysUNO();
+            	BUTTONLISTENER.sayUNO();
             }
         }
     }
@@ -92,7 +93,7 @@ public class CPUPlayer extends Player {
      * @param eventType the type of mouse event to simulate
      * @param delay the delay in milliseconds before dispatching the event
      */
-    private void simulateMouseEventWithDelay(ViewCard card, int eventType, int delay) {
+    public void simulateMouseEventWithDelay(ViewCard card, int eventType, int delay) {
         SwingUtilities.invokeLater(() -> {
             try {
                 Thread.sleep(delay);

@@ -29,6 +29,7 @@ public class Rules implements Constants {
     
     public boolean canPlay;
 	private String winner;
+	private String selectedColor;
 
     /**
      * Constructs the Rules controller for the game, initializing the game state,
@@ -49,7 +50,7 @@ public class Rules implements Constants {
         modifyFirstCard(firstCard);
         
         game.setSession(session);
-
+        
         game.whoseTurn();
         canPlay = true;
     }
@@ -113,8 +114,14 @@ public class Rules implements Constants {
                     default:
                         break;
                 }
+                
+                if (clickedCard instanceof WildCard && selectedColor == null) {
+                    return;
+                }
+                
 
                 game.switchTurn();
+                
                 session.updatePanel(clickedCard);
                 
                 if (clickedCard instanceof NumberCard) {
@@ -179,8 +186,7 @@ public class Rules implements Constants {
             infoPanel.updateText("GAME OVER");
             infoPanel.repaint();
           
-
-            // Read user data and add them all to users List.
+            // Read user data and add them all to users List. 
             List<String[]> users = UserFileHandler.readUserFile();
 
             for (Player player : game.getPlayers()) {
@@ -206,9 +212,9 @@ public class Rules implements Constants {
                                 infoPanel.repaint();
                                 logScore(player, totalScore);
                             } else {
-                                losses++;
+                            	losses++;
                             }
-
+                            
                             totalGames++;
                             userDetails[2] = String.valueOf(wins);
                             userDetails[3] = String.valueOf(losses);
@@ -216,8 +222,16 @@ public class Rules implements Constants {
                             userDetails[5] = String.valueOf(totalGames);
 
                             break;
+
+                            
                         }
                     }
+                    
+                    currentUser.setWins(wins);
+                    currentUser.setLosses(losses);
+                    currentUser.setTotalScore(totalScore);
+                    currentUser.setTotalGames(totalGames);
+                    
 
                     // Write the updated data back to the file
                     UserFileHandler.writeUserFile(users);
@@ -351,9 +365,9 @@ public class Rules implements Constants {
      * @param functionCard the wild card to be played
      */
     private void performWild(WildCard functionCard) {
-    	Color chosenColor;
+        Color chosenColor;
         if (game.isPCsTurn()) {
-        	chosenColor = getMostCommonColor((CPUPlayer) game.getCurrentPlayer());
+            chosenColor = getMostCommonColor((CPUPlayer) game.getCurrentPlayer());
             functionCard.useWildColor(chosenColor);
         } else {
             ArrayList<String> colors = new ArrayList<>();
@@ -362,9 +376,17 @@ public class Rules implements Constants {
             colors.add("GREEN");
             colors.add("YELLOW");
 
-            String selectedColor = (String) JOptionPane.showInputDialog(null,
+            selectedColor = (String) JOptionPane.showInputDialog(null,
                     "Choose a color", "Wild Card Color",
                     JOptionPane.DEFAULT_OPTION, null, colors.toArray(), null);
+
+            if (selectedColor == null) {
+                Player currentPlayer = game.getCurrentPlayer();
+                currentPlayer.obtainCard(functionCard);
+                discardCards.pop(); 
+
+                return; 
+            }
 
             functionCard.useWildColor(UNO_COLORS[colors.indexOf(selectedColor)]);
         }
@@ -373,6 +395,9 @@ public class Rules implements Constants {
             game.drawPlus(4);
         }
     }
+
+
+
     
     /**
      * Determines the most common color in the CPU player's hand.

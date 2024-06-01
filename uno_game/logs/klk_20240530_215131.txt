@@ -1,0 +1,71 @@
+Welcome to UNO Game!
+baldino played Green 6
+CPU 1 played Yellow 6
+baldino played Yellow 2+
+baldino played Yellow 8
+CPU 1 played Wild Card 4+ and chose Red color
+CPU 1 played Red 2
+baldino played Red Skip
+baldino played Green Skip
+baldino played Green 5
+CPU 1 played Green 7
+baldino played Green 3
+CPU 1 drew a card
+CPU 1 played Green 7
+baldino drew a Red 2+ card
+CPU 1 drew a card
+baldino drew a Red 6 card
+CPU 1 drew a card
+baldino drew a Green 1 card
+baldino played Green 1
+CPU 1 drew a card
+baldino drew a Yellow Reverse card
+CPU 1 drew a card
+baldino drew a Green 8 card
+baldino played Green 8
+CPU 1 played Red 8
+baldino played Red 2+
+baldino played Red 6
+CPU 1 played Red 4
+baldino played Red 3
+CPU 1 played Red 2+
+CPU 1 played Blue 2+
+CPU 1 played Blue Skip
+CPU 1 played Blue 4
+baldino played Blue 9
+CPU 1 played Blue 3
+baldino played Blue 6
+CPU 1 played Blue 7
+baldino played Blue 5
+CPU 1 played Blue 8
+baldino drew a Yellow 0 card
+CPU 1 drew a card
+CPU 1 played Wild Card 4+ and chose Red color
+CPU 1 played Red 7
+baldino played Wild Card 4+ and chose Green color
+baldino played Green 2+
+baldino played Green 9
+CPU 1 played Green 2+
+CPU 1 played Green 2
+baldino played Green 5
+CPU 1 drew a card
+baldino played Yellow 5
+CPU 1 played Yellow Skip
+CPU 1 played Yellow 2+
+CPU 1 drew a card
+baldino played Yellow Reverse
+baldino played Yellow 9
+CPU 1 drew a card
+CPU 1 played Yellow 5
+baldino played Yellow 3
+CPU 1 played Red 3
+baldino played Red 9
+CPU 1 played Red Reverse
+CPU 1 played Blue Reverse
+CPU 1 played Blue 2
+baldino played Blue 3
+CPU 1 played Blue 2+
+CPU 1 played Wild Card W and chose Green color
+baldino played Green 9
+CPU 1 played Green 8
+CPU 1 won the UNO game!!! 
