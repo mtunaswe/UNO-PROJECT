@@ -21,12 +21,16 @@ A fully-featured UNO card game implementation in Java with a graphical user inte
 
 ## Screenshots 📸
 
-*Game features login page, main menu, game board with card display, and player statistics*
+<img width="2545" height="1296" alt="Screenshot 2025-12-09 231737" src="https://github.com/user-attachments/assets/47463478-7d0c-403e-819d-1f17b0d5cb01" />
+
+<img width="987" height="644" alt="Screenshot 2025-12-09 231909" src="https://github.com/user-attachments/assets/37baf251-d917-4c2f-8365-7d08dd65dcd4" />
+
+<img width="968" height="584" alt="Screenshot 2025-12-09 231900" src="https://github.com/user-attachments/assets/b2bd7aa6-6706-4bd2-b7f3-a08fc1cea5ee" />
 
 ## Installation 🚀
 
 ### Prerequisites
-
+s
 - **Java JDK 17 or higher** is required
 - Download from: [Adoptium (Eclipse Temurin)](https://adoptium.net/) or [Oracle JDK](https://www.oracle.com/java/technologies/downloads/)
 
@@ -107,24 +111,6 @@ UNO-PROJECT/
 └── README.md               # This file
 ```
 
-## Development 💻
-
-### Setting up in IDE
-
-#### Visual Studio Code
-1. Install the "Extension Pack for Java" by Microsoft
-2. Open the project folder
-3. Press F5 or click "Run" above the `main` method in `Main.java`
-
-#### Eclipse
-1. File → Import → Existing Projects into Workspace
-2. Select the project directory
-3. Right-click `Main.java` → Run As → Java Application
-
-#### IntelliJ IDEA
-1. File → Open → Select project directory
-2. Right-click `Main.java` → Run 'Main.main()'
-
 ### Building
 
 The game uses a simple build system:
@@ -157,30 +143,6 @@ The game uses a simple build system:
 - Strategic card selection
 - Valid move generation
 - Automated gameplay
-
-## Known Issues 🐛
-
-- Resources must be in the correct path relative to the JAR file
-- User data is stored in plain text (not encrypted)
-
-## Future Enhancements 🚀
-
-- [ ] Multiplayer support (network play)
-- [ ] More CPU difficulty levels
-- [ ] Sound effects and music
-- [ ] Customizable themes
-- [ ] Mobile version
-- [ ] Tournament mode
-
-## Contributing 🤝
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the project
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## License 📄
 
