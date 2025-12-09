@@ -22,3 +22,8 @@ saved_games/
 
 # User data
 src/user.txt
+
+# Build artifacts
+bin/
+*.jar
+MANIFEST.MF
