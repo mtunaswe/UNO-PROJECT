@@ -1,0 +1,24 @@
+# Compiled class files
+/bin/
+*.class
+
+# Eclipse IDE files
+.classpath
+.project
+.settings/
+
+# IntelliJ IDEA files
+.idea/
+*.iml
+
+# Generated documentation
+index-files/
+legal/
+script-dir/
+
+# Runtime data
+logs/
+saved_games/
+
+# User data
+src/user.txt

@@ -1,1 +1,0 @@
-packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"m":"uno_game","l":"card_model"},{"m":"uno_game","l":"Controller"},{"m":"uno_game","l":"game_model"},{"m":"uno_game","l":"gui"},{"m":"uno_game","l":"Interfaces"},{"m":"uno_game","l":"Runnable"}];updateSearchResults();
